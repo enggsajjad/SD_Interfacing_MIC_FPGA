@@ -1,0 +1,35 @@
+WIN32 L51 CODE BANKING LINKER/LOCATOR V4.08.06,  INVOKED BY: 
+L51.EXE e:\microcontrollers\at89c51rc2\spi\spi_string_transfer_slave_master\spi_slave_4bitlcd\main.OBJ  to  E:\MICROCONTROLLERS\AT89C51RC2\SPI\SPI_STRING_TRANSFER_SLAVE_MASTER\SPI_SLAVE_4BITLCD\SLAVE.ABS PR(E:\MICROCONTROLLERS\AT89C51RC2\SPI\SPI_STRING_TRANSFER_SLAVE_MASTER\SPI_SLAVE_4BITLCD\SLAVE.M51) SN(1066142959415E46769E694) PW(80) RS(256) ix 
+
+INTER-MODULE CROSS-REFERENCE LISTING
+------------------------------------
+
+    NAME. . . . . . . . USAGE   MODULE NAMES
+    ----------------------------------------
+    ?C_START3 . . . . . CODE    [C3S]:  MAIN 
+    DELAYUS . . . . . . CODE    [MAIN]: 
+    G . . . . . . . . . DATA    [MAIN]: 
+    IDATALEN  . . . . .         [_C_IDATALEN]:  C3S 
+    IPGN1?C . . . . . . CODE    [IPGN1]:  MAIN 
+    ISINIT  . . . . . . BIT     [MAIN]: 
+    IT_SPI  . . . . . . CODE    [MAIN]: 
+    KEYINT  . . . . . . CODE    [MAIN]: 
+    LCDBUSY . . . . . . CODE    [MAIN]: 
+    LCDCLEAR  . . . . . CODE    [MAIN]:  MAIN 
+    LCDINIT . . . . . . CODE    [MAIN]:  MAIN 
+    MAIN  . . . . . . . CODE    [MAIN]:  C3S 
+    RECCHAR . . . . . . DATA    [MAIN]: 
+    SERIAL  . . . . . . CODE    [MAIN]: 
+    SERIAL_DATA . . . . DATA    [MAIN]: 
+    SPI_INTR  . . . . . BIT     [MAIN]: 
+    SPI_RX_BYTES  . . . DATA    [MAIN]: 
+    SPI_RX_DONE . . . . BIT     [MAIN]: 
+    STATUS  . . . . . . DATA    [MAIN]: 
+    _INITP2?  . . . . .         [_C_IDATALEN]:  C3S 
+    _LCDGOTOXY  . . . . CODE    [MAIN]:  MAIN 
+    _LCDWRITECHAR . . . CODE    [MAIN]:  MAIN 
+    _LCDWRITECMD  . . . CODE    [MAIN]:  MAIN 
+    _LCDWRITESTR  . . . CODE    [MAIN]:  MAIN 
+    _SENDCHAR . . . . . CODE    [MAIN]: 
+    _SENDSTR  . . . . . CODE    [MAIN]: 
+    _STACK  . . . . . . IDATA   [MAIN]:  C3S 

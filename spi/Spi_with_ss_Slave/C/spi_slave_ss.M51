@@ -1,0 +1,107 @@
+BL51 BANKED LINKER/LOCATER V5.03                                                        04/30/2004  15:26:50  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V5.03, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE spi_slave_ss.obj TO spi_slave_ss RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  spi_slave_ss.obj (SPI_SLAVE_SS)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  spi_slave_ss (SPI_SLAVE_SS)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0001H     UNIT         ?DT?SPI_SLAVE_SS
+                    0009H     0017H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         ?BI?SPI_SLAVE_SS
+                    0020H.1   0000H.7                *** GAP ***
+            IDATA   0021H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     001FH     UNIT         ?PR?IT_SPI?SPI_SLAVE_SS
+            CODE    0022H     001DH     UNIT         ?PR?MAIN?SPI_SLAVE_SS
+            CODE    003FH     000CH     UNIT         ?C_C51STARTUP
+            CODE    004BH     0003H     ABSOLUTE     
+
+
+
+OVERLAY MAP OF MODULE:   spi_slave_ss (SPI_SLAVE_SS)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?SPI_SLAVE_SS
+
+
+
+SYMBOL TABLE OF MODULE:  spi_slave_ss (SPI_SLAVE_SS)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        SPI_SLAVE_SS
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0008H         PUBLIC        serial_data
+  D:00C3H         PUBLIC        SPCON
+  B:00A8H.7       PUBLIC        EA
+  D:00C4H         PUBLIC        SPSTA
+  D:00B1H         PUBLIC        IEN1
+BL51 BANKED LINKER/LOCATER V5.03                                                      04/30/2004  15:26:50  PAGE 2
+
+
+  B:0020H.0       PUBLIC        transmit_completed
+  C:0022H         PUBLIC        main
+  C:0003H         PUBLIC        it_SPI
+  D:00C5H         PUBLIC        SPDAT
+  -------         PROC          MAIN
+  C:0022H         LINE#         31
+  C:0022H         LINE#         32
+  C:0022H         LINE#         33
+  C:0025H         LINE#         34
+  C:0028H         LINE#         35
+  C:002BH         LINE#         36
+  C:002EH         LINE#         37
+  C:0031H         LINE#         38
+  C:0033H         LINE#         39
+  C:0035H         LINE#         41
+  C:0035H         LINE#         42
+  C:0035H         LINE#         43
+  C:0038H         LINE#         44
+  C:0038H         LINE#         45
+  C:003BH         LINE#         46
+  C:003DH         LINE#         47
+  C:003DH         LINE#         48
+  -------         ENDPROC       MAIN
+  -------         PROC          IT_SPI
+  C:0003H         LINE#         57
+  C:000CH         LINE#         59
+  C:0013H         LINE#         60
+  C:0013H         LINE#         61
+  C:0013H         LINE#         62
+  C:0016H         LINE#         63
+  C:0018H         LINE#         64
+  C:0018H         LINE#         66
+  C:0018H         LINE#         68
+  C:0018H         LINE#         70
+  C:0018H         LINE#         72
+  C:0018H         LINE#         73
+  C:0018H         LINE#         74
+  C:001BH         LINE#         75
+  -------         ENDPROC       IT_SPI
+  -------         ENDMOD        SPI_SLAVE_SS
+
+Program Size: data=10.1 xdata=0 code=78
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

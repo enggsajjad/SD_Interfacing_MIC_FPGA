@@ -1,0 +1,50 @@
+WIN32 L51 CODE BANKING LINKER/LOCATOR V4.08.06,  INVOKED BY: 
+L51.EXE f:\p\sd\spi\spi_sdcard\spi_master_no_ss.OBJ  to  F:\P\SD\SPI\SPI_SDCARD\SPI.ABS PR(F:\P\SD\SPI\SPI_SDCARD\SPI.M51) SN(1066142959415E46769E694) PW(80) RS(256) ix 
+
+INTER-MODULE CROSS-REFERENCE LISTING
+------------------------------------
+
+    NAME. . . . . . . . USAGE   MODULE NAMES
+    ----------------------------------------
+    ?C_INITSEGSTART . . CODE    [_C_INITD]:  C1S 
+    ?C_START1 . . . . . CODE    [C1S]:  SPI_MASTER_NO_SS 
+    CMD_CG_RAM  . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_CLR . . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_DD_RAM  . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_DSP . . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_DSP_B . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_DSP_C . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_DSP_D . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_ETR . . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_ETR_ID  . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_ETR_S . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_FN  . . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_FN_DL . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_FN_F  . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_FN_N  . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_HOM . . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_SHT . . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_SHT_RL  . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CMD_SHT_SC  . . . . DATA    [SPI_MASTER_NO_SS]: 
+    CNT . . . . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    COUNT . . . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    DATA_EXAMPLE  . . . DATA    [SPI_MASTER_NO_SS]: 
+    DATA_SAVE . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    IDATALEN  . . . . .         [_C_IDATALEN]:  C1S 
+    IPGN1?C . . . . . . CODE    [IPGN1]:  SPI_MASTER_NO_SS 
+    ISINIT  . . . . . . BIT     [SPI_MASTER_NO_SS]: 
+    IT_SPI  . . . . . . CODE    [SPI_MASTER_NO_SS]: 
+    KEY1  . . . . . . . DATA    [SPI_MASTER_NO_SS]: 
+    KEYINT  . . . . . . CODE    [SPI_MASTER_NO_SS]: 
+    LCDBUSY . . . . . . CODE    [SPI_MASTER_NO_SS]: 
+    LCDINIT . . . . . . CODE    [SPI_MASTER_NO_SS]: 
+    MAIN  . . . . . . . CODE    [SPI_MASTER_NO_SS]:  C1S 
+    PCATIMERS . . . . . CODE    [SPI_MASTER_NO_SS]: 
+    SERIAL_DATA . . . . DATA    [SPI_MASTER_NO_SS]: 
+    TRANSMIT_COMPLETED  BIT     [SPI_MASTER_NO_SS]: 
+    _INITP2?  . . . . .         [_C_IDATALEN]:  C1S 
+    _LCDGOTOXY  . . . . CODE    [SPI_MASTER_NO_SS]: 
+    _LCDWRITECHAR . . . CODE    [SPI_MASTER_NO_SS]: 
+    _LCDWRITECMD  . . . CODE    [SPI_MASTER_NO_SS]:  SPI_MASTER_NO_SS 
+    _LCDWRITESTR  . . . CODE    [SPI_MASTER_NO_SS]: 
+    _STACK  . . . . . . IDATA   [SPI_MASTER_NO_SS]:  C1S 

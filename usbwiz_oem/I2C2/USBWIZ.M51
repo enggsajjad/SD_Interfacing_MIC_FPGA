@@ -1,0 +1,755 @@
+L51 CODE BANKING LINKER/LOCATOR V4.08.06        01/08/110  15:12:49  PAGE  1
+WIN32 L51 CODE BANKING LINKER/LOCATOR V4.08.06,  INVOKED BY:
+L51.EXE f:\p\sd\usbwiz_oem\i2c2\main.OBJ  to  F:\P\SD\USBWIZ_OEM\I2C2\USBWIZ.&
+ABS PR(F:\P\SD\USBWIZ_OEM\I2C2\USBWIZ.M51) PW(80) RS(128) ix 
+
+
+MEMORY MODEL: SMALL WITHOUT ANY FLOATING POINT ARITHMETIC
+
+
+INPUT MODULES INCLUDED
+  F:\P\SD\USBWIZ_OEM\I2C2\MAIN.OBJ(MAIN)
+  C:\FSI\LIB\C51S.LIB(C3S)
+  C:\FSI\LIB\C51S.LIB(IPGN1)
+  C:\FSI\LIB\C51S.LIB(CMPL)
+  C:\FSI\LIB\C51S.LIB(RST_STK)
+  C:\FSI\LIB\C51S.LIB(_C_IDATALEN)
+
+
+LINK MAP OF MODULE: F:\P\SD\USBWIZ_OEM\I2C2\USBWIZ.ABS (MAIN)
+
+    TYPE     BASE       LENGTH    RELOCATION     SEGMENT NAME
+    ----     ----       ------    ----------     ------------
+
+    * * * * * * *   DATA          M E M O R Y   * * * * * * *
+    REG      0000H      0008H     ABSOLUTE       "REG BANK 0"
+    REG      0008H      0008H     ABSOLUTE       "REG BANK 1"
+    DATA     0010H      0004H     UNIT           ?DT?MAIN
+    DATA     0014H      0003H     OVERLAID UNIT  ?DT?_SD_WRITECMD?MAIN
+    DATA     0014H      0001H     OVERLAID UNIT  ?DT?SD_READ?MAIN
+    DATA     0017H      0001H     UNIT           ?DT?_SD_WRITE?MAIN
+    DATA     0018H      0002H     UNIT           ?DT?_I2C_WRITE?MAIN
+             001AH      0006H                    *** GAP ***
+    BIT      0020H.0    0000H.3   UNIT           ?BI?MAIN
+    BIT      0020H.3    0000H.1   OVERLAID UNIT  ?BI?_I2C_WRITE?MAIN
+    BIT      0020H.3    0000H.1   OVERLAID UNIT  ?BI?I2C_READ?MAIN
+    IDATA    0021H      0001H     * * STACK * *  _STACK
+
+    * * * * * * *   CODE          M E M O R Y   * * * * * * *
+    CODE     0000H      0003H     ABSOLUTE       
+    CODE     0003H      0003H     ABSOLUTE       
+    CODE     0006H      002BH     INBLOCK        ?PR?MOVES?LIB51
+             0031H      0002H                    *** GAP ***
+    CODE     0033H      0003H     ABSOLUTE       
+    CODE     0036H      004EH     UNIT           ?PR?LIB51
+    CODE     0084H      000FH     UNIT           ?PR?C51_STARTUP?
+    CODE     0093H      0023H     UNIT           ?PR?_SD_WRITECMD?MAIN
+    CODE     00B6H      0010H     UNIT           ?PR?DELAY5MS?MAIN
+    CODE     00C6H      0010H     UNIT           ?PR?DELAY30MS?MAIN
+    CODE     00D6H      001AH     UNIT           ?PR?LCDINIT?MAIN
+    CODE     00F0H      0012H     UNIT           ?PR?LCDBUSY?MAIN
+    CODE     0102H      000EH     UNIT           ?PR?_LCDWRITECMD?MAIN
+    CODE     0110H      000EH     UNIT           ?PR?_LCDWRITECHAR?MAIN
+    CODE     011EH      0027H     UNIT           ?PR?_LCDWRITESTR?MAIN
+    CODE     0145H      002EH     UNIT           ?PR?_LCDGOTOXY?MAIN
+    CODE     0173H      0009H     UNIT           ?PR?LCDCLEAR?MAIN
+    CODE     017CH      0005H     UNIT           ?PR?I2C_DELAY?MAIN
+    CODE     0181H      000BH     UNIT           ?PR?I2C_CLOCK?MAIN
+    CODE     018CH      0014H     UNIT           ?PR?I2C_START?MAIN
+    CODE     01A0H      0012H     UNIT           ?PR?I2C_STOP?MAIN
+    CODE     01B2H      0033H     UNIT           ?PR?_I2C_WRITE?MAIN
+    CODE     01E5H      0021H     UNIT           ?PR?I2C_READ?MAIN
+    CODE     0206H      000BH     UNIT           ?PR?I2C_NOACK?MAIN
+    CODE     0211H      0019H     UNIT           ?PR?SD_READ?MAIN
+    CODE     022AH      0016H     UNIT           ?PR?_SD_WRITE?MAIN
+    CODE     0240H      003DH     UNIT           ?STR?MAIN
+    CODE     027DH      0105H     UNIT           ?PR?MAIN?MAIN
+    CODE     0382H      0012H     UNIT           ?PR?PCATIMERS?MAIN
+    CODE     0394H      00D4H     UNIT           ?PR?KEYINTERRUPT?MAIN
+
+EXECUTABLE SUMMARY:
+L51 CODE BANKING LINKER/LOCATOR V4.08.06          01/08/110  15:12:49  PAGE  2
+
+-------------------
+    Total INTERNAL storage requirement:  001AH.4 (26.4)
+    Total EXTERNAL storage requirement:  0000H (0)
+    Total   CODE   storage requirement:  0466H (1126)
+Note:  Summary does not include dynamic stack requirements
+
+
+REFERENCE MAP OF MODULE: F:\P\SD\USBWIZ_OEM\I2C2\USBWIZ.ABS (MAIN)
+
+SEGMENT
+   +-->CALLED SEGMENT
+---------------------
+?PR?_SD_WRITECMD?MAIN
+   +-->?PR?_SD_WRITE?MAIN
+
+?PR?LCDINIT?MAIN
+   +-->?PR?_LCDWRITECMD?MAIN
+
+?PR?_LCDWRITECMD?MAIN
+   +-->?PR?LCDBUSY?MAIN
+
+?PR?_LCDWRITECHAR?MAIN
+   +-->?PR?LCDBUSY?MAIN
+
+?PR?_LCDWRITESTR?MAIN
+   +-->?PR?_LCDWRITECHAR?MAIN
+
+?PR?_LCDGOTOXY?MAIN
+   +-->?PR?_LCDWRITECMD?MAIN
+
+?PR?LCDCLEAR?MAIN
+   +-->?PR?DELAY5MS?MAIN
+   +-->?PR?_LCDWRITECMD?MAIN
+
+?PR?I2C_CLOCK?MAIN
+   +-->?PR?I2C_DELAY?MAIN
+
+?PR?I2C_START?MAIN
+   +-->?PR?I2C_DELAY?MAIN
+
+?PR?I2C_STOP?MAIN
+   +-->?PR?I2C_DELAY?MAIN
+
+?PR?_I2C_WRITE?MAIN
+   +-->?PR?I2C_DELAY?MAIN
+   +-->?PR?I2C_CLOCK?MAIN
+
+?PR?I2C_READ?MAIN
+   +-->?PR?I2C_DELAY?MAIN
+
+?PR?I2C_NOACK?MAIN
+   +-->?PR?I2C_CLOCK?MAIN
+   +-->?PR?I2C_DELAY?MAIN
+
+?PR?SD_READ?MAIN
+   +-->?PR?_LCDWRITECHAR?MAIN
+   +-->?PR?I2C_STOP?MAIN
+   +-->?PR?I2C_NOACK?MAIN
+   +-->?PR?I2C_READ?MAIN
+   +-->?PR?_I2C_WRITE?MAIN
+   +-->?PR?I2C_START?MAIN
+
+?PR?_SD_WRITE?MAIN
+   +-->?PR?I2C_STOP?MAIN
+   +-->?PR?_I2C_WRITE?MAIN
+   +-->?PR?I2C_START?MAIN
+
+?PR?MAIN?MAIN
+L51 CODE BANKING LINKER/LOCATOR V4.08.06          01/08/110  15:12:49  PAGE  3
+
+   +-->?PR?MAIN?MAIN
+   +-->?PR?_SD_WRITECMD?MAIN
+   +-->?STR?MAIN
+   +-->?PR?_LCDWRITECHAR?MAIN
+   +-->?PR?_SD_WRITE?MAIN
+   +-->?PR?LIB51
+   +-->?PR?SD_READ?MAIN
+   +-->?PR?DELAY5MS?MAIN
+   +-->?PR?_LCDGOTOXY?MAIN
+   +-->?PR?LCDINIT?MAIN
+
+?PR?KEYINTERRUPT?MAIN
+   +-->?PR?LCDCLEAR?MAIN
+   +-->?PR?_SD_WRITECMD?MAIN
+   +-->?STR?MAIN
+   +-->?PR?_LCDWRITECHAR?MAIN
+   +-->?PR?SD_READ?MAIN
+   +-->?PR?KEYINTERRUPT?MAIN
+
+
+SYMBOL TABLE FOR F:\P\SD\USBWIZ_OEM\I2C2\USBWIZ.ABS(MAIN)
+----------------------------------------------------------
+
+    VALUE              TYPE               NAME
+    -----              ----               ----
+
+	-------            MODULE             MAIN
+	C:0000H            SYMBOL             _ICE_DUMMY_
+	C:0394H            PUBLIC             KeyInterrupt
+	C:0382H            PUBLIC             PCATimers
+	C:027DH            PUBLIC             main
+	C:0206H            PUBLIC             I2C_noack
+	C:01E5H            PUBLIC             I2C_read
+	C:01B2H            PUBLIC             _I2C_write
+	C:01A0H            PUBLIC             I2C_stop
+	C:018CH            PUBLIC             I2C_start
+	C:0181H            PUBLIC             I2C_clock
+	C:017CH            PUBLIC             I2C_delay
+	C:00F0H            PUBLIC             LcdBusy
+	C:00D6H            PUBLIC             LcdInit
+	C:0145H            PUBLIC             _LcdGotoXY
+	C:0211H            PUBLIC             SD_Read
+	C:022AH            PUBLIC             _SD_Write
+	C:0110H            PUBLIC             _LcdWriteChar
+	C:0102H            PUBLIC             _LcdWriteCmd
+	C:011EH            PUBLIC             _LcdWriteStr
+	C:0093H            PUBLIC             _SD_WriteCmd
+	C:0173H            PUBLIC             LcdClear
+	C:00C6H            PUBLIC             Delay30ms
+	C:00B6H            PUBLIC             Delay5ms
+	B:0002H            PUBLIC             sdRead_End
+	B:0001H            PUBLIC             sdRead_Start
+	B:0000H            PUBLIC             isInit
+	D:0012H            PUBLIC             h
+	D:0011H            PUBLIC             state
+	D:0010H            PUBLIC             Key
+	B:0097H            SYMBOL             I2C_SDA
+	B:0096H            SYMBOL             I2C_SCL
+	B:0095H            SYMBOL             I2C_BUSY
+	B:0094H            SYMBOL             I2C_READY
+	B:0093H            SYMBOL             EN
+	B:0092H            SYMBOL             RW
+	B:0087H            SYMBOL             BS
+	B:00B6H            SYMBOL             RS
+	D:00D1H            SYMBOL             FCON
+	D:0097H            SYMBOL             CKRL
+	D:00A2H            SYMBOL             AUXR1
+	D:008EH            SYMBOL             AUXR
+L51 CODE BANKING LINKER/LOCATOR V4.08.06          01/08/110  15:12:49  PAGE  4
+
+	D:009EH            SYMBOL             KBF
+	D:009DH            SYMBOL             KBE
+	D:009CH            SYMBOL             KBLS
+	B:00DEH            SYMBOL             ECCF4
+	B:00DFH            SYMBOL             PWM4
+	B:00E0H            SYMBOL             TOG4
+	B:00E1H            SYMBOL             MAT4
+	B:00E2H            SYMBOL             CAPN4
+	B:00E3H            SYMBOL             CAPP4
+	B:00E4H            SYMBOL             ECOM4
+	D:00DEH            SYMBOL             CCAPM4
+	D:00EEH            SYMBOL             CCAP4L
+	D:00FEH            SYMBOL             CCAP4H
+	B:00DDH            SYMBOL             ECCF3
+	B:00DEH            SYMBOL             PWM3
+	B:00DFH            SYMBOL             TOG3
+	B:00E0H            SYMBOL             MAT3
+	B:00E1H            SYMBOL             CAPN3
+	B:00E2H            SYMBOL             CAPP3
+	B:00E3H            SYMBOL             ECOM3
+	D:00DDH            SYMBOL             CCAPM3
+	D:00EDH            SYMBOL             CCAP3L
+	D:00FDH            SYMBOL             CCAP3H
+	B:00DCH            SYMBOL             ECCF2
+	B:00DDH            SYMBOL             PWM2
+	B:00DEH            SYMBOL             TOG2
+	B:00DFH            SYMBOL             MAT2
+	B:00E0H            SYMBOL             CAPN2
+	B:00E1H            SYMBOL             CAPP2
+	B:00E2H            SYMBOL             ECOM2
+	D:00DCH            SYMBOL             CCAPM2
+	D:00ECH            SYMBOL             CCAP2L
+	D:00FCH            SYMBOL             CCAP2H
+	B:00DBH            SYMBOL             ECCF1
+	B:00DCH            SYMBOL             PWM1
+	B:00DDH            SYMBOL             TOG1
+	B:00DEH            SYMBOL             MAT1
+	B:00DFH            SYMBOL             CAPN1
+	B:00E0H            SYMBOL             CAPP1
+	B:00E1H            SYMBOL             ECOM1
+	D:00DBH            SYMBOL             CCAPM1
+	D:00EBH            SYMBOL             CCAP1L
+	D:00FBH            SYMBOL             CCAP1H
+	B:00DAH            SYMBOL             ECCF0
+	B:00DBH            SYMBOL             PWM0
+	B:00DCH            SYMBOL             TOG0
+	B:00DDH            SYMBOL             MAT0
+	B:00DEH            SYMBOL             CAPN0
+	B:00DFH            SYMBOL             CAPP0
+	B:00E0H            SYMBOL             ECOM0
+	D:00DAH            SYMBOL             CCAPM0
+	D:00EAH            SYMBOL             CCAP0L
+	D:00FAH            SYMBOL             CCAP0H
+	D:00E9H            SYMBOL             CL
+	D:00F9H            SYMBOL             CH
+	B:00D9H            SYMBOL             ECF
+	B:00DAH            SYMBOL             CPS0
+	B:00DBH            SYMBOL             CPS1
+	B:00DFH            SYMBOL             WDTE
+	B:00E0H            SYMBOL             CIDL
+	D:00D9H            SYMBOL             CMOD
+	B:00D8H            SYMBOL             CCF0
+	B:00D9H            SYMBOL             CCF1
+	B:00DAH            SYMBOL             CCF2
+	B:00DBH            SYMBOL             CCF3
+	B:00DCH            SYMBOL             CCF4
+	B:00DEH            SYMBOL             CR
+	B:00DFH            SYMBOL             CF
+L51 CODE BANKING LINKER/LOCATOR V4.08.06          01/08/110  15:12:49  PAGE  5
+
+	D:00D8H            SYMBOL             CCON
+	B:00A8H            SYMBOL             EX0
+	B:00A9H            SYMBOL             ET0
+	B:00AAH            SYMBOL             EX1
+	B:00ABH            SYMBOL             ET1
+	B:00ACH            SYMBOL             ES
+	B:00ADH            SYMBOL             ET2
+	B:00AEH            SYMBOL             EC
+	B:00AFH            SYMBOL             EA
+	D:00B2H            SYMBOL             IPL1
+	D:00B8H            SYMBOL             IPL0
+	D:00B3H            SYMBOL             IPH1
+	D:00B7H            SYMBOL             IPH0
+	D:00B1H            SYMBOL             IEN1
+	D:00A8H            SYMBOL             IEN0
+	D:009BH            SYMBOL             BDRCON
+	D:009AH            SYMBOL             BRL
+	D:00A9H            SYMBOL             SADDR
+	D:00B9H            SYMBOL             SADEN
+	D:0099H            SYMBOL             SBUF
+	B:0098H            SYMBOL             RI
+	B:0099H            SYMBOL             TI
+	B:009AH            SYMBOL             RB8
+	B:009BH            SYMBOL             TB8
+	B:009CH            SYMBOL             REN
+	B:009DH            SYMBOL             SM2
+	B:009EH            SYMBOL             SM1
+	B:009FH            SYMBOL             FE
+	B:009FH            SYMBOL             SM0
+	D:0098H            SYMBOL             SCON
+	D:00A7H            SYMBOL             WDTPRG
+	D:00A6H            SYMBOL             WDTRST
+	D:00CBH            SYMBOL             RCAP2H
+	D:00CAH            SYMBOL             RCAP2L
+	D:00CDH            SYMBOL             TH2
+	D:008DH            SYMBOL             TH1
+	D:008CH            SYMBOL             TH0
+	D:00CCH            SYMBOL             TL2
+	D:008BH            SYMBOL             TL1
+	D:008AH            SYMBOL             TL0
+	D:00C9H            SYMBOL             T2MOD
+	B:00C8H            SYMBOL             CP_RL2
+	B:00C9H            SYMBOL             C_T2
+	B:00CAH            SYMBOL             TR2
+	B:00CBH            SYMBOL             EXEN2
+	B:00CCH            SYMBOL             TCLK
+	B:00CDH            SYMBOL             RCLK
+	B:00CEH            SYMBOL             EXF2
+	B:00CFH            SYMBOL             TF2
+	D:00C8H            SYMBOL             T2CON
+	D:0089H            SYMBOL             TMOD
+	B:0088H            SYMBOL             IT0
+	B:0089H            SYMBOL             IE0
+	B:008AH            SYMBOL             IT1
+	B:008BH            SYMBOL             IE1
+	B:008CH            SYMBOL             TR0
+	B:008DH            SYMBOL             TF0
+	B:008EH            SYMBOL             TR1
+	B:008FH            SYMBOL             TF1
+	D:0088H            SYMBOL             TCON
+	D:00AFH            SYMBOL             CKCON1
+	D:008FH            SYMBOL             CKCON0
+	D:0087H            SYMBOL             PCON
+	D:0083H            SYMBOL             DPH
+	D:0082H            SYMBOL             DPL
+	D:0081H            SYMBOL             SP
+	D:00F0H            SYMBOL             B
+	D:00E0H            SYMBOL             ACC
+L51 CODE BANKING LINKER/LOCATOR V4.08.06          01/08/110  15:12:49  PAGE  6
+
+	B:00D0H            SYMBOL             P
+	B:00D1H            SYMBOL             UD
+	B:00D2H            SYMBOL             OV
+	B:00D3H            SYMBOL             RS0
+	B:00D4H            SYMBOL             RS1
+	B:00D5H            SYMBOL             F0
+	B:00D6H            SYMBOL             AC
+	B:00D7H            SYMBOL             CY
+	D:00D0H            SYMBOL             PSW
+	B:00B0H            SYMBOL             RXD
+	B:00B1H            SYMBOL             TXD
+	B:00B2H            SYMBOL             INT0
+	B:00B3H            SYMBOL             INT1
+	B:00B4H            SYMBOL             T0
+	B:00B5H            SYMBOL             T1
+	B:00B6H            SYMBOL             WR
+	B:00B7H            SYMBOL             RD
+	B:00B0H            SYMBOL             P3_0
+	B:00B1H            SYMBOL             P3_1
+	B:00B2H            SYMBOL             P3_2
+	B:00B3H            SYMBOL             P3_3
+	B:00B4H            SYMBOL             P3_4
+	B:00B5H            SYMBOL             P3_5
+	B:00B6H            SYMBOL             P3_6
+	B:00B7H            SYMBOL             P3_7
+	D:00B0H            SYMBOL             P3
+	B:00A0H            SYMBOL             P2_0
+	B:00A1H            SYMBOL             P2_1
+	B:00A2H            SYMBOL             P2_2
+	B:00A3H            SYMBOL             P2_3
+	B:00A4H            SYMBOL             P2_4
+	B:00A5H            SYMBOL             P2_5
+	B:00A6H            SYMBOL             P2_6
+	B:00A7H            SYMBOL             P2_7
+	D:00A0H            SYMBOL             P2
+	B:0090H            SYMBOL             P1_0
+	B:0091H            SYMBOL             P1_1
+	B:0092H            SYMBOL             P1_2
+	B:0093H            SYMBOL             P1_3
+	B:0094H            SYMBOL             P1_4
+	B:0095H            SYMBOL             P1_5
+	B:0096H            SYMBOL             P1_6
+	B:0097H            SYMBOL             P1_7
+	D:0090H            SYMBOL             P1
+	B:0080H            SYMBOL             P0_0
+	B:0081H            SYMBOL             P0_1
+	B:0082H            SYMBOL             P0_2
+	B:0083H            SYMBOL             P0_3
+	B:0084H            SYMBOL             P0_4
+	B:0085H            SYMBOL             P0_5
+	B:0086H            SYMBOL             P0_6
+	B:0087H            SYMBOL             P0_7
+	D:0080H            SYMBOL             P0
+	-------            PROC               _SD_WRITECMD
+	D:0014H            SYMBOL             cmd
+	C:0093H            LINE#              30
+	C:0093H            LINE#              30
+	C:0099H            LINE#              32
+	C:00A4H            LINE#              31
+	C:00A4H            LINE#              34
+	C:00ABH            LINE#              35
+	C:00B5H            LINE#              37
+	-------            ENDPROC            _SD_WRITECMD
+	-------            PROC               DELAY5MS
+	C:00B6H            LINE#              38
+	C:00B6H            LINE#              38
+	C:00B6H            LINE#              40
+	C:00BCH            LINE#              41
+L51 CODE BANKING LINKER/LOCATOR V4.08.06          01/08/110  15:12:49  PAGE  7
+
+	C:00BEH            LINE#              42
+	C:00C1H            LINE#              43
+	C:00C3H            LINE#              44
+	C:00C5H            LINE#              45
+	-------            ENDPROC            DELAY5MS
+	-------            PROC               DELAY30MS
+	C:00C6H            LINE#              46
+	C:00C6H            LINE#              46
+	C:00C6H            LINE#              48
+	C:00CCH            LINE#              49
+	C:00CEH            LINE#              50
+	C:00D1H            LINE#              51
+	C:00D3H            LINE#              52
+	C:00D5H            LINE#              53
+	-------            ENDPROC            DELAY30MS
+	-------            PROC               LCDINIT
+	C:00D6H            LINE#              55
+	C:00D6H            LINE#              55
+	C:00D6H            LINE#              57
+	C:00DBH            LINE#              58
+	C:00E0H            LINE#              59
+	C:00E5H            LINE#              60
+	C:00EAH            LINE#              61
+	C:00EFH            LINE#              62
+	-------            ENDPROC            LCDINIT
+	-------            PROC               LCDBUSY
+	C:00F0H            LINE#              64
+	C:00F0H            LINE#              64
+	C:00F0H            LINE#              66
+	C:00F2H            LINE#              67
+	C:00F4H            LINE#              68
+	C:00F6H            LINE#              69
+	C:00F8H            LINE#              70
+	C:00FBH            LINE#              65
+	C:00FBH            LINE#              72
+	C:00FDH            LINE#              73
+	C:0101H            LINE#              75
+	-------            ENDPROC            LCDBUSY
+	-------            PROC               _LCDWRITECMD
+	C:0102H            LINE#              76
+	C:0102H            LINE#              76
+	C:0102H            LINE#              78
+	C:0104H            LINE#              79
+	C:0106H            LINE#              80
+	C:0108H            LINE#              81
+	C:010AH            LINE#              82
+	C:010CH            LINE#              83
+	C:010FH            LINE#              84
+	-------            ENDPROC            _LCDWRITECMD
+	-------            PROC               _LCDWRITECHAR
+	C:0110H            LINE#              85
+	C:0110H            LINE#              85
+	C:0110H            LINE#              87
+	C:0112H            LINE#              88
+	C:0114H            LINE#              89
+	C:0116H            LINE#              90
+	C:0118H            LINE#              91
+	C:011AH            LINE#              92
+	C:011DH            LINE#              93
+	-------            ENDPROC            _LCDWRITECHAR
+	-------            PROC               _LCDWRITESTR
+	C:011EH            LINE#              94
+	C:011EH            LINE#              94
+	C:0124H            LINE#              96
+	C:012FH            LINE#              97
+	C:0144H            LINE#              98
+	-------            ENDPROC            _LCDWRITESTR
+	-------            PROC               _LCDGOTOXY
+L51 CODE BANKING LINKER/LOCATOR V4.08.06          01/08/110  15:12:49  PAGE  8
+
+	C:0145H            LINE#              100
+	C:0145H            LINE#              100
+	C:0145H            LINE#              102
+	C:0153H            LINE#              101
+	C:0153H            LINE#              104
+	C:015BH            LINE#              105
+	C:0163H            LINE#              106
+	C:016BH            LINE#              107
+	C:0172H            LINE#              108
+	C:0172H            LINE#              110
+	-------            ENDPROC            _LCDGOTOXY
+	-------            PROC               LCDCLEAR
+	C:0173H            LINE#              112
+	C:0173H            LINE#              112
+	C:0173H            LINE#              114
+	C:0178H            LINE#              115
+	C:017BH            LINE#              116
+	-------            ENDPROC            LCDCLEAR
+	-------            PROC               I2C_DELAY
+	C:017CH            LINE#              118
+	C:017CH            LINE#              118
+	C:017CH            LINE#              121
+	C:0180H            LINE#              122
+	-------            ENDPROC            I2C_DELAY
+	-------            PROC               I2C_CLOCK
+	C:0181H            LINE#              123
+	C:0181H            LINE#              123
+	C:0181H            LINE#              125
+	C:0184H            LINE#              126
+	C:0186H            LINE#              127
+	C:0189H            LINE#              128
+	C:018BH            LINE#              129
+	-------            ENDPROC            I2C_CLOCK
+	-------            PROC               I2C_START
+	C:018CH            LINE#              130
+	C:018CH            LINE#              130
+	C:018CH            LINE#              132
+	C:018FH            LINE#              133
+	C:0191H            LINE#              134
+	C:0193H            LINE#              135
+	C:0195H            LINE#              136
+	C:0198H            LINE#              137
+	C:019AH            LINE#              138
+	C:019DH            LINE#              139
+	C:019FH            LINE#              140
+	-------            ENDPROC            I2C_START
+	-------            PROC               I2C_STOP
+	C:01A0H            LINE#              142
+	C:01A0H            LINE#              142
+	C:01A0H            LINE#              144
+	C:01A3H            LINE#              145
+	C:01A5H            LINE#              146
+	C:01A7H            LINE#              147
+	C:01AAH            LINE#              148
+	C:01ACH            LINE#              149
+	C:01AFH            LINE#              150
+	C:01B1H            LINE#              151
+	-------            ENDPROC            I2C_STOP
+	-------            PROC               _I2C_WRITE
+	D:0018H            SYMBOL             dat
+	B:0003H            SYMBOL             data_bit
+	D:0019H            SYMBOL             i
+	C:01B2H            LINE#              153
+	C:01B2H            LINE#              153
+	C:01B4H            LINE#              157
+	C:01B7H            LINE#              154
+	C:01B7H            LINE#              159
+	C:01BFH            LINE#              160
+L51 CODE BANKING LINKER/LOCATOR V4.08.06          01/08/110  15:12:49  PAGE  9
+
+	C:01C1H            LINE#              161
+	C:01C4H            LINE#              162
+	C:01CAH            LINE#              157
+	C:01D1H            LINE#              164
+	C:01D3H            LINE#              165
+	C:01D6H            LINE#              166
+	C:01D8H            LINE#              167
+	C:01DBH            LINE#              168
+	C:01DFH            LINE#              169
+	C:01E1H            LINE#              170
+	C:01E4H            LINE#              171
+	C:01E4H            LINE#              172
+	-------            ENDPROC            _I2C_WRITE
+	-------            PROC               I2C_READ
+	B:0003H            SYMBOL             rd_bit
+	C:01E5H            LINE#              174
+	C:01E5H            LINE#              174
+	C:01E5H            LINE#              178
+	C:01E8H            LINE#              179
+	C:01E8H            LINE#              175
+	C:01E8H            LINE#              181
+	C:01EBH            LINE#              182
+	C:01EDH            LINE#              183
+	C:01F0H            LINE#              184
+	C:01F4H            LINE#              185
+	C:01F8H            LINE#              186
+	C:01FEH            LINE#              187
+	C:0200H            LINE#              179
+	C:0204H            LINE#              189
+	C:0205H            LINE#              190
+	-------            ENDPROC            I2C_READ
+	-------            PROC               I2C_NOACK
+	C:0206H            LINE#              191
+	C:0206H            LINE#              191
+	C:0206H            LINE#              193
+	C:0208H            LINE#              194
+	C:020BH            LINE#              195
+	C:020EH            LINE#              196
+	C:0210H            LINE#              197
+	-------            ENDPROC            I2C_NOACK
+	-------            PROC               SD_READ
+	D:0014H            SYMBOL             dat
+	C:0211H            LINE#              198
+	C:0211H            LINE#              198
+	C:0211H            LINE#              201
+	C:0214H            LINE#              202
+	C:0219H            LINE#              203
+	C:021EH            LINE#              204
+	C:0221H            LINE#              205
+	C:0224H            LINE#              206
+	C:0229H            LINE#              207
+	C:0229H            LINE#              208
+	-------            ENDPROC            SD_READ
+	-------            PROC               _SD_WRITE
+	D:0017H            SYMBOL             val
+	C:022AH            LINE#              209
+	C:022AH            LINE#              209
+	C:022CH            LINE#              212
+	C:022FH            LINE#              213
+	C:0234H            LINE#              214
+	C:0239H            LINE#              215
+	C:023CH            LINE#              216
+	C:023FH            LINE#              217
+	-------            ENDPROC            _SD_WRITE
+	-------            PROC               MAIN
+	C:027DH            LINE#              12
+	C:027DH            LINE#              12
+	C:027DH            LINE#              14
+L51 CODE BANKING LINKER/LOCATOR V4.08.06          01/08/110  15:12:49  PAGE 10
+
+	C:0280H            LINE#              15
+	C:0283H            LINE#              17
+	C:0285H            LINE#              18
+	C:0287H            LINE#              19
+	C:0289H            LINE#              21
+	C:028CH            LINE#              22
+	C:0293H            LINE#              24
+	C:0296H            LINE#              25
+	C:029BH            LINE#              26
+	C:029EH            LINE#              27
+	C:02A3H            LINE#              29
+	C:02A6H            LINE#              30
+	C:02A9H            LINE#              31
+	C:02ACH            LINE#              32
+	C:02AEH            LINE#              33
+	C:02B0H            LINE#              35
+	C:02B0H            LINE#              13
+	C:02B0H            LINE#              37
+	C:02B3H            LINE#              13
+	C:02B3H            LINE#              39
+	C:02B5H            LINE#              40
+	C:02B8H            LINE#              41
+	C:02BEH            LINE#              42
+	C:02C1H            LINE#              43
+	C:02C3H            LINE#              46
+	C:02C6H            LINE#              13
+	C:02C6H            LINE#              48
+	C:02C8H            LINE#              49
+	C:02F5H            LINE#              13
+	C:02F5H            LINE#              52
+	C:02F5H            LINE#              54
+	C:02FAH            LINE#              55
+	C:02FDH            LINE#              56
+	C:0306H            LINE#              57
+	C:0308H            LINE#              59
+	C:030DH            LINE#              60
+	C:0310H            LINE#              61
+	C:0319H            LINE#              62
+	C:031BH            LINE#              64
+	C:0320H            LINE#              65
+	C:0323H            LINE#              70
+	C:032CH            LINE#              71
+	C:032EH            LINE#              73
+	C:0333H            LINE#              74
+	C:0336H            LINE#              76
+	C:0352H            LINE#              77
+	C:0357H            LINE#              76
+	C:0361H            LINE#              78
+	C:0361H            LINE#              80
+	C:0366H            LINE#              81
+	C:0368H            LINE#              82
+	C:036BH            LINE#              83
+	C:036EH            LINE#              85
+	C:0373H            LINE#              86
+	C:0376H            LINE#              87
+	C:037FH            LINE#              88
+	C:037FH            LINE#              90
+	C:037FH            LINE#              94
+	-------            ENDPROC            MAIN
+	-------            PROC               PCATIMERS
+	C:0382H            LINE#              96
+	C:0387H            LINE#              96
+	C:0387H            LINE#              98
+	C:038DH            LINE#              97
+	C:038DH            LINE#              100
+	C:038FH            LINE#              101
+	C:0393H            LINE#              103
+	-------            ENDPROC            PCATIMERS
+L51 CODE BANKING LINKER/LOCATOR V4.08.06          01/08/110  15:12:49  PAGE 11
+
+	-------            PROC               KEYINTERRUPT
+	C:0394H            LINE#              105
+	C:03AEH            LINE#              105
+	C:03AEH            LINE#              107
+	C:03B4H            LINE#              108
+	C:03BAH            LINE#              106
+	C:03BAH            LINE#              110
+	C:03E8H            LINE#              106
+	C:03E8H            LINE#              113
+	C:03EBH            LINE#              114
+	C:03F1H            LINE#              115
+	C:03F7H            LINE#              116
+	C:03FDH            LINE#              117
+	C:0403H            LINE#              118
+	C:0405H            LINE#              120
+	C:0408H            LINE#              121
+	C:0411H            LINE#              122
+	C:0413H            LINE#              124
+	C:041CH            LINE#              125
+	C:041EH            LINE#              127
+	C:0427H            LINE#              128
+	C:0429H            LINE#              130
+	C:0432H            LINE#              131
+	C:0434H            LINE#              135
+	C:043DH            LINE#              136
+	C:043FH            LINE#              138
+	C:0448H            LINE#              139
+	C:044AH            LINE#              141
+	C:044AH            LINE#              143
+	C:044AH            LINE#              145
+	C:044DH            LINE#              146
+	C:0467H            LINE#              149
+	-------            ENDPROC            KEYINTERRUPT
+	-------            ENDMOD             MAIN
+	C:0084H            PUBLIC             ?C_START3
+	C:0006H            PUBLIC             IPGN1?C
+	C:0036H            PUBLIC             ?C_CMPLS
+	C:0045H            PUBLIC             ?C_CMPL
+	C:0075H            PUBLIC             RST_STK4?C
+	C:0071H            PUBLIC             RST_STK6?C
+	C:006DH            PUBLIC             RST_STK7?C
+	C:0077H            PUBLIC             RST_STK?C
+	N:007FH            PUBLIC             IDATALEN
+	N:00FFH            PUBLIC             _INITP2?
+
+UNCALLED SEGMENTS:
+------------------
+    ?PR?DELAY30MS?MAIN: Function DELAY30MS in file F:\P\SD\USBWIZ_OEM\I2C2\MAIN&
+.OBJ was not called
+    ?PR?_LCDWRITESTR?MAIN: Function _LCDWRITESTR in file F:\P\SD\USBWIZ_OEM\I2C&
+2\MAIN.OBJ was not called
+
+LINK/LOCATE RUN COMPLETE,  NO ERROR FOUND.

@@ -1,0 +1,59 @@
+# Reading C:/Modeltech_xe/tcl/vsim/pref.tcl 
+# Updating type .mpf file registration. 
+# Updating type .wlf file registration. 
+# do spi_interface_tf_v_tf.fdo 
+# ** Warning: (vlib-34) Library already exists at "work".
+# Model Technology ModelSim XE II vlog 5.6e Compiler 2002.10 Oct 22 2002
+# -- Compiling module spi_com
+# 
+# Top level modules:
+# 	spi_com
+# Model Technology ModelSim XE II vlog 5.6e Compiler 2002.10 Oct 22 2002
+# -- Compiling module spi_test
+# 
+# Top level modules:
+# 	spi_test
+# Model Technology ModelSim XE II vlog 5.6e Compiler 2002.10 Oct 22 2002
+# -- Compiling module spi_contlr
+# 
+# Top level modules:
+# 	spi_contlr
+# Model Technology ModelSim XE II vlog 5.6e Compiler 2002.10 Oct 22 2002
+# -- Compiling module spi_interface
+# 
+# Top level modules:
+# 	spi_interface
+# Model Technology ModelSim XE II vlog 5.6e Compiler 2002.10 Oct 22 2002
+# -- Compiling module spi_interface_tf_v_tf
+# 
+# Top level modules:
+# 	spi_interface_tf_v_tf
+# Model Technology ModelSim XE II vlog 5.6e Compiler 2002.10 Oct 22 2002
+# -- Compiling module glbl
+# 
+# Top level modules:
+# 	glbl
+# vsim -L xilinxcorelib_ver -L unisims_ver -lib work -t 1ps spi_interface_tf_v_tf glbl 
+# Loading work.spi_interface_tf_v_tf
+# Loading work.spi_interface
+# ** Warning: (vsim-3009) [TSCALE] - Module 'spi_interface' does not have a `timescale directive in effect, but previous modules do.
+#         Region: /spi_interface_tf_v_tf/uut
+# Loading work.spi_contlr
+# ** Warning: (vsim-3009) [TSCALE] - Module 'spi_contlr' does not have a `timescale directive in effect, but previous modules do.
+#         Region: /spi_interface_tf_v_tf/uut/spi
+# Loading work.spi_com
+# ** Warning: (vsim-3009) [TSCALE] - Module 'spi_com' does not have a `timescale directive in effect, but previous modules do.
+#         Region: /spi_interface_tf_v_tf/uut/spi/sc
+# Loading work.spi_test
+# ** Warning: (vsim-3009) [TSCALE] - Module 'spi_test' does not have a `timescale directive in effect, but previous modules do.
+#         Region: /spi_interface_tf_v_tf/uut/spi/spit
+# Loading work.glbl
+# .wave
+# .structure
+# .signals
+run -all
+# Break key hit 
+# Simulation stop requested
+run -all
+# Break key hit 
+# Break at tf.v line 31

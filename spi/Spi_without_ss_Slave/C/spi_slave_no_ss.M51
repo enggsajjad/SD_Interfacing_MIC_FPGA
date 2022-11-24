@@ -1,0 +1,225 @@
+BL51 BANKED LINKER/LOCATER V5.00                                                        11/19/2008  15:34:10  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V5.00, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE spi_slave_no_ss.obj TO spi_slave_no_ss RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  spi_slave_no_ss.obj (SPI_SLAVE_NO_SS)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+
+
+LINK MAP OF MODULE:  spi_slave_no_ss (SPI_SLAVE_NO_SS)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0001H     UNIT         ?DT?SPI_SLAVE_NO_SS
+                    0009H     0017H                  *** GAP ***
+            BIT     0020H.0   0000H.1   UNIT         ?BI?SPI_SLAVE_NO_SS
+                    0020H.1   0000H.7                *** GAP ***
+            IDATA   0021H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0025H     UNIT         ?PR?MAIN?SPI_SLAVE_NO_SS
+            CODE    0028H     001FH     UNIT         ?PR?IT_SPI?SPI_SLAVE_NO_SS
+                    0047H     0004H                  *** GAP ***
+            CODE    004BH     0003H     ABSOLUTE     
+            CODE    004EH     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   spi_slave_no_ss (SPI_SLAVE_NO_SS)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?SPI_SLAVE_NO_SS
+
+
+
+SYMBOL TABLE OF MODULE:  spi_slave_no_ss (SPI_SLAVE_NO_SS)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        SPI_SLAVE_NO_SS
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  B:00D8H.2       PUBLIC        CCF2
+  B:00D8H.3       PUBLIC        CCF3
+  D:0008H         PUBLIC        serial_data
+  B:00D8H.4       PUBLIC        CCF4
+BL51 BANKED LINKER/LOCATER V5.00                                                      11/19/2008  15:34:10  PAGE 2
+
+
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  B:00D0H.6       PUBLIC        AC
+  B:00B0H.4       PUBLIC        T0
+  D:00C3H         PUBLIC        SPCON
+  B:00B0H.5       PUBLIC        T1
+  B:00A8H.7       PUBLIC        EA
+  B:00A8H.6       PUBLIC        EC
+  B:00D8H.7       PUBLIC        CF
+  B:0098H.7       PUBLIC        FE
+  D:00C4H         PUBLIC        SPSTA
+  D:00B1H         PUBLIC        IEN1
+  B:0080H.0       PUBLIC        P0_0
+  B:0090H.0       PUBLIC        P1_0
+  B:0080H.1       PUBLIC        P0_1
+  B:00A0H.0       PUBLIC        P2_0
+  B:0090H.1       PUBLIC        P1_1
+  B:0080H.2       PUBLIC        P0_2
+  B:00B0H.0       PUBLIC        P3_0
+  B:00A0H.1       PUBLIC        P2_1
+  B:0090H.2       PUBLIC        P1_2
+  B:0080H.3       PUBLIC        P0_3
+  B:00C0H.0       PUBLIC        P4_0
+  B:00B0H.1       PUBLIC        P3_1
+  B:00A0H.2       PUBLIC        P2_2
+  B:0090H.3       PUBLIC        P1_3
+  B:0080H.4       PUBLIC        P0_4
+  B:00D8H.6       PUBLIC        CR
+  B:00E8H.0       PUBLIC        P5_0
+  B:00C0H.1       PUBLIC        P4_1
+  B:00B0H.2       PUBLIC        P3_2
+  B:00A0H.3       PUBLIC        P2_3
+  B:0090H.4       PUBLIC        P1_4
+  B:0080H.5       PUBLIC        P0_5
+  B:00C8H.6       PUBLIC        EXF2
+  B:00E8H.1       PUBLIC        P5_1
+  B:00C0H.2       PUBLIC        P4_2
+  B:00B0H.7       PUBLIC        RD
+  B:00B0H.3       PUBLIC        P3_3
+  B:00A0H.4       PUBLIC        P2_4
+  B:0090H.5       PUBLIC        P1_5
+  B:0080H.6       PUBLIC        P0_6
+  B:00E8H.2       PUBLIC        P5_2
+  B:00C0H.3       PUBLIC        P4_3
+  B:00B0H.4       PUBLIC        P3_4
+  B:00A0H.5       PUBLIC        P2_5
+  B:0090H.6       PUBLIC        P1_6
+  B:0080H.7       PUBLIC        P0_7
+  B:00A8H.4       PUBLIC        ES
+  B:00E8H.3       PUBLIC        P5_3
+  B:00C0H.4       PUBLIC        P4_4
+  B:00B0H.5       PUBLIC        P3_5
+  B:00A0H.6       PUBLIC        P2_6
+  B:0090H.7       PUBLIC        P1_7
+  B:00D0H.1       PUBLIC        UD
+  B:00E8H.4       PUBLIC        P5_4
+  B:00C0H.5       PUBLIC        P4_5
+BL51 BANKED LINKER/LOCATER V5.00                                                      11/19/2008  15:34:10  PAGE 3
+
+
+  B:00B0H.6       PUBLIC        P3_6
+  B:00A0H.7       PUBLIC        P2_7
+  B:00E8H.5       PUBLIC        P5_5
+  B:00C0H.6       PUBLIC        P4_6
+  B:00B0H.7       PUBLIC        P3_7
+  B:0098H.0       PUBLIC        RI
+  B:00E8H.6       PUBLIC        P5_6
+  B:00C0H.7       PUBLIC        P4_7
+  B:0020H.0       PUBLIC        transmit_completed
+  B:00D0H.7       PUBLIC        CY
+  B:00E8H.7       PUBLIC        P5_7
+  B:00B0H.2       PUBLIC        INT0
+  B:0098H.1       PUBLIC        TI
+  B:00B0H.3       PUBLIC        INT1
+  B:00D0H.2       PUBLIC        OV
+  C:0003H         PUBLIC        main
+  B:00C8H.1       PUBLIC        C_T2
+  B:00B0H.6       PUBLIC        WR
+  C:0028H         PUBLIC        it_SPI
+  B:00C8H.5       PUBLIC        RCLK
+  B:00C8H.4       PUBLIC        TCLK
+  B:0090H.1       PUBLIC        P11
+  B:0088H.1       PUBLIC        IE0
+  B:0088H.3       PUBLIC        IE1
+  B:00C8H.0       PUBLIC        CP_RL2
+  B:00A8H.1       PUBLIC        ET0
+  B:00A8H.3       PUBLIC        ET1
+  B:0088H.5       PUBLIC        TF0
+  B:00A8H.5       PUBLIC        ET2
+  B:0088H.7       PUBLIC        TF1
+  B:0098H.2       PUBLIC        RB8
+  B:00C8H.7       PUBLIC        TF2
+  B:00A8H.0       PUBLIC        EX0
+  B:0088H.0       PUBLIC        IT0
+  B:00A8H.2       PUBLIC        EX1
+  B:0098H.3       PUBLIC        TB8
+  B:0088H.2       PUBLIC        IT1
+  B:00D0H.0       PUBLIC        P
+  B:0098H.7       PUBLIC        SM0
+  B:0098H.6       PUBLIC        SM1
+  B:0098H.5       PUBLIC        SM2
+  B:00D0H.3       PUBLIC        RS0
+  B:0088H.4       PUBLIC        TR0
+  B:00D0H.4       PUBLIC        RS1
+  B:0088H.6       PUBLIC        TR1
+  B:00C8H.2       PUBLIC        TR2
+  B:00F8H.0       PUBLIC        PI2_0
+  B:00F8H.1       PUBLIC        PI2_1
+  B:00C8H.3       PUBLIC        EXEN2
+  B:0098H.4       PUBLIC        REN
+  B:00B0H.0       PUBLIC        RXD
+  B:00B0H.1       PUBLIC        TXD
+  B:00D0H.5       PUBLIC        F0
+  B:00D8H.0       PUBLIC        CCF0
+  D:00C5H         PUBLIC        SPDAT
+  B:00D8H.1       PUBLIC        CCF1
+  -------         PROC          MAIN
+BL51 BANKED LINKER/LOCATER V5.00                                                      11/19/2008  15:34:10  PAGE 4
+
+
+  C:0003H         LINE#         31
+  C:0003H         LINE#         32
+  C:0003H         LINE#         33
+  C:0006H         LINE#         35
+  C:0009H         LINE#         36
+  C:000CH         LINE#         37
+  C:000FH         LINE#         38
+  C:0012H         LINE#         39
+  C:0015H         LINE#         40
+  C:0017H         LINE#         41
+  C:0019H         LINE#         43
+  C:0019H         LINE#         44
+  C:0019H         LINE#         45
+  C:001BH         LINE#         46
+  C:001EH         LINE#         47
+  C:001EH         LINE#         48
+  C:0021H         LINE#         49
+  C:0024H         LINE#         50
+  C:0026H         LINE#         51
+  C:0026H         LINE#         52
+  -------         ENDPROC       MAIN
+  -------         PROC          IT_SPI
+  C:0028H         LINE#         63
+  C:0031H         LINE#         65
+  C:0038H         LINE#         66
+  C:0038H         LINE#         67
+  C:0038H         LINE#         68
+  C:003BH         LINE#         69
+  C:003DH         LINE#         70
+  C:003DH         LINE#         72
+  C:003DH         LINE#         74
+  C:003DH         LINE#         76
+  C:003DH         LINE#         78
+  C:003DH         LINE#         79
+  C:003DH         LINE#         80
+  C:0040H         LINE#         81
+  -------         ENDPROC       IT_SPI
+  -------         ENDMOD        SPI_SLAVE_NO_SS
+
+Program Size: data=10.1 xdata=0 code=86
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

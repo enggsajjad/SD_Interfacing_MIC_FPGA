@@ -1,0 +1,38 @@
+WIN32 L51 CODE BANKING LINKER/LOCATOR V4.08.06,  INVOKED BY: 
+L51.EXE f:\spi\spi\spi_1byte_transfer_slave_master\spi_master_8bitlcd\main.OBJ  to  F:\SPI\SPI\SPI_1BYTE_TRANSFER_SLAVE_MASTER\SPI_MASTER_8BITLCD\MASTER.ABS PR(F:\SPI\SPI\SPI_1BYTE_TRANSFER_SLAVE_MASTER\SPI_MASTER_8BITLCD\MASTER.M51) SN(1066142959415E46769E694) PW(80) RS(256) ix 
+
+INTER-MODULE CROSS-REFERENCE LISTING
+------------------------------------
+
+    NAME. . . . . . . . USAGE   MODULE NAMES
+    ----------------------------------------
+    ?C_INITSEGSTART . . CODE    [_C_INITD]:  C1S 
+    ?C_START1 . . . . . CODE    [C1S]:  MAIN 
+    DATA_EXAMPLE  . . . DATA    [MAIN]: 
+    DATA_SAVE . . . . . DATA    [MAIN]: 
+    DELAYUS . . . . . . CODE    [MAIN]: 
+    G . . . . . . . . . DATA    [MAIN]: 
+    I . . . . . . . . . DATA    [MAIN]: 
+    IDATALEN  . . . . .         [_C_IDATALEN]:  C1S 
+    IPGN1?C . . . . . . CODE    [IPGN1]:  MAIN 
+    ISINIT  . . . . . . BIT     [MAIN]: 
+    IT_SPI  . . . . . . CODE    [MAIN]: 
+    KEY . . . . . . . . DATA    [MAIN]: 
+    KEYINT  . . . . . . CODE    [MAIN]: 
+    LCDBUSY . . . . . . CODE    [MAIN]: 
+    LCDCLEAR  . . . . . CODE    [MAIN]:  MAIN 
+    LCDINIT . . . . . . CODE    [MAIN]:  MAIN 
+    MAIN  . . . . . . . CODE    [MAIN]:  C1S 
+    RECCHAR . . . . . . DATA    [MAIN]: 
+    SERIAL  . . . . . . CODE    [MAIN]: 
+    SERIAL_DATA . . . . DATA    [MAIN]: 
+    SPI_INTR  . . . . . BIT     [MAIN]: 
+    STATUS  . . . . . . DATA    [MAIN]: 
+    _INITP2?  . . . . .         [_C_IDATALEN]:  C1S 
+    _LCDGOTOXY  . . . . CODE    [MAIN]:  MAIN 
+    _LCDWRITECHAR . . . CODE    [MAIN]:  MAIN 
+    _LCDWRITECMD  . . . CODE    [MAIN]:  MAIN 
+    _LCDWRITESTR  . . . CODE    [MAIN]:  MAIN 
+    _SENDCHAR . . . . . CODE    [MAIN]: 
+    _SENDSTR  . . . . . CODE    [MAIN]: 
+    _STACK  . . . . . . IDATA   [MAIN]:  C1S 

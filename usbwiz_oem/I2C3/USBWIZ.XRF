@@ -1,0 +1,39 @@
+WIN32 L51 CODE BANKING LINKER/LOCATOR V4.08.06,  INVOKED BY: 
+L51.EXE f:\i2c3\main.OBJ  to  F:\I2C3\USBWIZ.ABS PR(F:\I2C3\USBWIZ.M51) SN(1066142959415E46769E694) PW(80) RS(128) ix 
+
+INTER-MODULE CROSS-REFERENCE LISTING
+------------------------------------
+
+    NAME. . . . . . . . USAGE   MODULE NAMES
+    ----------------------------------------
+    ?C_START3 . . . . . CODE    [C3S]:  MAIN 
+    DELAY30MS . . . . . CODE    [MAIN]: 
+    DELAY5MS  . . . . . CODE    [MAIN]: 
+    H . . . . . . . . . DATA    [MAIN]: 
+    I2C_READ  . . . . . CODE    [MAIN]: 
+    I2C_START . . . . . CODE    [MAIN]: 
+    I2C_STOP  . . . . . CODE    [MAIN]: 
+    IDATALEN  . . . . .         [_C_IDATALEN]:  C3S 
+    IPGN1?C . . . . . . CODE    [IPGN1]:  MAIN 
+    ISINIT  . . . . . . BIT     [MAIN]: 
+    KEY . . . . . . . . DATA    [MAIN]: 
+    KEYINTERRUPT  . . . CODE    [MAIN]: 
+    LCDBUSY . . . . . . CODE    [MAIN]: 
+    LCDCLEAR  . . . . . CODE    [MAIN]: 
+    LCDINIT . . . . . . CODE    [MAIN]: 
+    MAIN  . . . . . . . CODE    [MAIN]:  C3S 
+    PCATIMERS . . . . . CODE    [MAIN]: 
+    RXBUF . . . . . . . XDATA   [MAIN]: 
+    SDREAD_END  . . . . BIT     [MAIN]: 
+    SDREAD_START  . . . BIT     [MAIN]: 
+    SD_READ . . . . . . CODE    [MAIN]: 
+    STATE . . . . . . . DATA    [MAIN]: 
+    _I2C_WRITE  . . . . CODE    [MAIN]: 
+    _INITP2?  . . . . .         [_C_IDATALEN]:  C3S 
+    _LCDGOTOXY  . . . . CODE    [MAIN]: 
+    _LCDWRITECHAR . . . CODE    [MAIN]: 
+    _LCDWRITECMD  . . . CODE    [MAIN]:  MAIN 
+    _LCDWRITESTR  . . . CODE    [MAIN]: 
+    _SD_WRITE . . . . . CODE    [MAIN]:  MAIN 
+    _SD_WRITECMD  . . . CODE    [MAIN]: 
+    _STACK  . . . . . . IDATA   [MAIN]:  C3S 

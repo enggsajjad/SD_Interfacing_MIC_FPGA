@@ -1,0 +1,1358 @@
+C51 COMPILER V6.11.4C,  MAIN1                     01/08/110  15:04:58  PAGE  1
+
+QCW(0x00002D1A)
+
+WIN32 C51 COMPILER V6.11.4C, COMPILATION OF MODULE MAIN1     
+OBJECT MODULE PLACED IN f:\i2c3\main1.obj
+COMPILER INVOKED BY: C51.EXE F:\I2C3\MAIN1.C OBJECT(F:\I2C3\MAIN1.OBJ) PIN(C:\FS
+            -I\INC) NOAM PR(F:\I2C3\MAIN1.LST) CD SB OE(1) SM FP(NOFLOAT) PW(80)
+            - 
+
+stmt level    source
+   1          /*				Digital Rate Meter Ranging 0.001Hz  --  1000Hz
+   2          				Using PCA Interrupt Only
+   3          				Handling Noise Pulse
+   4          				Control Action Performed
+   5                      Programmer: Sajjad Hussain S.E.
+   6                      Dated: 	21-05-2009
+   7          */
+   8          #include "at89c51rc2.h"
+   9          #include "usbwiz_oem.h"
+  10          #include <intrins.h>
+  11          // Main Program Starts Here
+  12          void main()
+  13          {
+  14   1      
+  15   1      	TMOD = 0x11;
+  16   1      
+  17   1      	IT0 = 1;
+  18   1      	EX0 = 1;
+  19   1      	EA = 1;
+  20   1         // Initial Screen
+  21   1      	LcdInit();
+  22   1      	LcdGotoXY(1,1);
+  23   1      	Delay5ms();
+  24   1      	
+  25   1      	while(I2C_READY)
+  26   1      		SD_Read(); 	
+  27   1      	Putc('I');
+  28   1      	
+  29   1      	CCON = 0x00;
+  30   1      	CMOD = 0x00;
+  31   1      	CCAPM1 = 0x21;// Capture +ve Edge
+  32   1      	//EC = 1;
+  33   1      	state = 0;
+  34   1      	isInit = 1;
+  35   1      	//Running Forever
+  36   1      	while(1)
+  37   1      	{
+  38   2      		switch(state)
+  39   2      		{
+  40   3      		 	case 0: //idle
+  41   3      		 		Putc('A');
+  42   3      		 		break;
+  43   3      		 	case 1:
+  44   3      		 		
+  45   3      		 		CCAPM1 = 0x00;
+  46   3      		 		while(SD_Read()!=13);
+  47   3      				CCAPM1 = 0x21;
+  48   3      				Putc('B');
+  49   3      				state = Next;
+  50   3      				break;
+  51   3      			case 2:
+  52   3      				
+  53   3      				SD_WriteCmd("FM S\r");
+  54   3      				Putc('C');
+  55   3      				Next = 3;
+  56   3      				break;
+  57   3      			case 3:
+  58   3      				Putc('D');
+  59   3      				break;
+  60   3      		}//sw
+  61   2      	}//wh
+  62   1      }//main
+  63          
+  64          void PCATimers() interrupt 6  using 1
+  65          {
+  66   1      
+  67   1      	if(isInit&&CCF1)
+  68   1      	{
+  69   2      		CCF1 = 0;
+  70   2      		//rising = 1;
+  71   2      		state = 1;
+  72   2      	}
+  73   1      }
+  74          
+  75          void KeyInterrupt() interrupt 0
+  76          {
+  77   1      	Key = P2&0x1F;
+  78   1      	if(isInit)
+  79   1      	{
+  80   2      	 	switch(Key)
+  81   2      	 	{
+  82   3      	 	 	case 0:
+  83   3      	 	 		LcdClear();
+  84   3      	 	 		Putc(SD_Read());
+  85   3      	 	 		Putc(SD_Read());
+  86   3      	 	 		Putc(SD_Read());
+  87   3      	 	 		Putc(SD_Read());
+  88   3      	 	 		break;	 	 	
+  89   3      	 	 	case 1:
+  90   3       	 			Next = 2;
+  91   3       	 			EC = 1;
+  92   3      	 	 		SD_WriteCmd("SD\r");
+  93   3      	 	 		break;
+  94   3      	 	 	case 2:
+  95   3      	 	 		SD_WriteCmd("FM S\r");
+  96   3      	 	 		break;
+  97   3      	 	 	case 3:
+  98   3      	 	 		SD_WriteCmd("OF 0W>TEST.TXT\r");
+  99   3      	 	 		break;
+ 100   3      	 	 	case 4:
+ 101   3      	 	 		SD_WriteCmd("WF 0>9\r");
+ 102   3      	 	 		break;
+ 103   3      	 	 	case 5:
+ 104   3      	 	 		//for(h=0;h<100;h++)
+ 105   3      	 	 		//	SD_Write(h+48);
+ 106   3      	 	 		SD_WriteCmd("123456789");
+ 107   3      	 	 		break;
+ 108   3      	 	 	case 6:
+ 109   3      	 	 		SD_WriteCmd("CF 0\r");
+ 110   3      	 	 		break;
+ 111   3      	 	 	case 7:
+ 112   3      	 	 		SD_Write('S');
+ 113   3      	 	 		SD_Write('D');
+ 114   3      	 	 		SD_Write(13);
+ 115   3      				for(dly=0;dly<100;dly++)
+ 116   3      					Delay30ms();
+ 117   3      				while(I2C_READY)
+ 118   3      		 			SD_Read();
+ 119   3      		 			
+ 120   3      	 	 		SD_Write('F');
+ 121   3      	 	 		SD_Write('M');
+ 122   3      	 	 		SD_Write(' ');
+ 123   3      	 	 		SD_Write('S');
+ 124   3      	 	 		SD_Write(13);
+ 125   3      				for(dly=0;dly<100;dly++)
+ 126   3      					Delay30ms();
+ 127   3      				while(I2C_READY)
+ 128   3      		 			SD_Read();
+ 129   3      		 			
+ 130   3      
+ 131   3      	 	 		SD_Write('O');
+ 132   3      	 	 		SD_Write('F');
+ 133   3      	 	 		SD_Write(' ');
+ 134   3      	 	 		SD_Write('0');
+ 135   3      	 	 		SD_Write('W');
+ 136   3      	 	 		SD_Write('>');
+ 137   3      	 	 		SD_Write('T');
+ 138   3      	 	 		SD_Write('E');
+ 139   3      	 	 		SD_Write('S');
+ 140   3      	 	 		SD_Write('T');
+ 141   3      	 	 		SD_Write('.');
+ 142   3      	 	 		SD_Write('T');
+ 143   3      	 	 		SD_Write('X');
+ 144   3      	 	 		SD_Write('T');
+ 145   3      	 	 		SD_Write(13);
+ 146   3      				for(dly=0;dly<100;dly++)
+ 147   3      					Delay30ms();
+ 148   3      				while(I2C_READY)
+ 149   3      		 			SD_Read();
+ 150   3      	 	 		
+ 151   3      	 	 		SD_Write('W');
+ 152   3      	 	 		SD_Write('F');
+ 153   3      	 	 		SD_Write(' ');
+ 154   3      	 	 		SD_Write('0');
+ 155   3      	 	 		SD_Write('>');
+ 156   3      	 	 		//SD_Write('3');
+ 157   3      	 	 		//SD_Write('E');
+ 158   3      	 	 		//SD_Write('8');
+ 159   3      	 	 		SD_Write('6');
+ 160   3      	 	 		SD_Write('4');
+ 161   3      	 	 		SD_Write(13);
+ 162   3      				for(dly=0;dly<100;dly++)
+ 163   3      					Delay30ms();
+ 164   3      				while(I2C_READY)
+ 165   3      		 			SD_Read();
+ 166   3      					
+ 167   3      	 	 		for(h=0;h<100;h++)
+ 168   3      	 	 			SD_Write(h%255);
+ 169   3      				for(dly=0;dly<100;dly++)
+ 170   3      					Delay30ms();
+ 171   3      				while(I2C_READY)
+ 172   3      		 			SD_Read();
+ 173   3      	 	 		/*
+ 174   3      	 	 		SD_Write('0');
+ 175   3      	 	 		SD_Write('1');
+ 176   3      	 	 		SD_Write('2');
+ 177   3      	 	 		SD_Write('3');
+ 178   3      	 	 		SD_Write('4');
+ 179   3      	 	 		SD_Write('5');
+ 180   3      	 	 		SD_Write('6');
+ 181   3      	 	 		SD_Write('7');
+ 182   3      	 	 		SD_Write('8');
+ 183   3      	 	 		SD_Write('9');
+ 184   3      	 	 		SD_Write('A');
+ 185   3      	 	 		SD_Write('B');
+ 186   3      	 	 		SD_Write('C');
+ 187   3      	 	 		SD_Write('D');
+ 188   3      	 	 		SD_Write('E');
+ 189   3      	 	 		SD_Write('F');
+ 190   3      	 	 		*/
+ 191   3      	 	 		SD_Write('C');
+ 192   3      	 	 		SD_Write('F');
+ 193   3      	 	 		SD_Write(' ');
+ 194   3      	 	 		SD_Write('0');
+ 195   3      	 	 		SD_Write(13);
+ 196   3      				for(dly=0;dly<100;dly++)
+ 197   3      					Delay30ms();
+ 198   3      				while(I2C_READY)
+ 199   3      		 			SD_Read();
+ 200   3      	 	 		Putc('7');
+ 201   3      	 	 		break;
+ 202   3      	 	 	case 8:
+ 203   3      	 	 		break;
+ 204   3      	 	 	case 9:
+ 205   3      	 	 		break;
+ 206   3      	 	 	case 12:
+ 207   3      	 	 		LcdClear();
+ 208   3      	 	 		break;
+ 209   3      		}		
+ 210   2      	}
+ 211   1      }
+ 212          
+ 213          
+ 214          
+ 215          
+ 216          
+ 217          
+ 218          
+ 219          
+ 220          
+ 221          
+ 222          
+ 223          
+ 224          
+ 225          
+ 226          
+ 227          
+ 228          
+ 229          
+ 230          
+ 231          
+ 232          
+ 233          
+ 234          
+ 235          
+ 236          
+ 237          
+ 238          
+ 239          
+ 240          
+ 241          
+ 242          
+ 243          
+ 244          
+ 245          
+ 246          
+ 247          
+ 248          
+ 249          
+ 250          
+ 251          
+ 252          
+ 253          
+ 254          
+ 255          
+ 256          
+ 257          
+ 258          
+ 259          
+ 260          
+ 261          
+ 262          
+ 263          
+ 264          
+ 265          
+ 266          
+ 267          
+ 268          
+ 269          
+ 270          
+ 271          
+ 272          
+ 273          
+ 274          
+ 275          
+ 276          
+ 277          
+ 278          
+ 279          
+ 280          
+ 281          
+ 282          
+ 283          
+ 284          
+ 285          
+ 286          
+ 287          
+ 288          
+ 289          
+ 290          
+ 291          
+ 292          
+ 293          
+ 294          
+ 295          
+ 296          
+ 297          
+ 298          
+ 299          
+ 300          
+ 301          
+ 302          
+ 303          
+ 304          
+ 305          
+ 306          
+ 307          
+ 308          
+ 309          
+ 310          
+ 311          
+ 312          
+ 313          
+ 314          
+ 315          
+ 316          
+ 317          
+ 318          
+ 319          
+ 320          
+ 321          
+ 322          
+ 323          
+ 324          
+ 325          
+ 326          
+ 327          
+ 328          
+C51 COMPILER V6.11.4C,  MAIN1                     01/08/110  15:04:58  PAGE  2
+
+ASSEMBLY LISTING OF GENERATED OBJECT CODE
+
+            ; FUNCTION _SD_WriteCmd (BEGIN)
+                                           ; SOURCE LINE # 37 
+0000 8B00    R      MOV    cmd,R3
+0002 8A00    R      MOV    cmd+01H,R2
+0004 8900    R      MOV    cmd+02H,R1
+0006         ?WHILE1:
+                                           ; SOURCE LINE # 34 
+0006 AB00    R      MOV    R3,cmd
+0008 AA00    R      MOV    R2,cmd+01H
+000A A900    R      MOV    R1,cmd+02H
+000C 120000  R      LCALL  IPGN1?C
+000F 6011           JZ     ?NXT1
+                                           ; SOURCE LINE # 36 
+0011 120000  R      LCALL  IPGN1?C
+0014 FF             MOV    R7,A
+0015 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 37 
+0018 0500    R      INC    cmd+02H
+001A E500    R      MOV    A,cmd+02H
+001C 70E8           JNZ    ?WHILE1
+001E 0500    R      INC    cmd+01H
+0020 80E4           SJMP   ?WHILE1
+0022         ?NXT1:
+0022 22             RET    
+
+            ; FUNCTION _SD_WriteCmd (END)
+
+            ; FUNCTION Delay5ms (BEGIN)
+                                           ; SOURCE LINE # 42 
+0000 758A00         MOV    TL0,#000H
+0003 758CDC         MOV    TH0,#0DCH
+                                           ; SOURCE LINE # 43 
+0006 D28C           SETB   TR0
+0008         ?WHILE3:
+                                           ; SOURCE LINE # 44 
+0008 308DFD         JNB    TF0,?WHILE3
+                                           ; SOURCE LINE # 45 
+000B C28C           CLR    TR0
+                                           ; SOURCE LINE # 46 
+000D C28D           CLR    TF0
+000F 22             RET    
+
+            ; FUNCTION Delay5ms (END)
+
+            ; FUNCTION Delay30ms (BEGIN)
+                                           ; SOURCE LINE # 50 
+0000 758A00         MOV    TL0,#000H
+0003 758C28         MOV    TH0,#028H
+                                           ; SOURCE LINE # 51 
+0006 D28C           SETB   TR0
+0008         ?WHILE5:
+                                           ; SOURCE LINE # 52 
+0008 308DFD         JNB    TF0,?WHILE5
+                                           ; SOURCE LINE # 53 
+000B C28C           CLR    TR0
+                                           ; SOURCE LINE # 54 
+000D C28D           CLR    TF0
+000F 22             RET    
+
+            ; FUNCTION Delay30ms (END)
+
+            ; FUNCTION LcdInit (BEGIN)
+                                           ; SOURCE LINE # 59 
+0000 7F38           MOV    R7,#038H
+0002 120000  R      LCALL  _LcdWriteCmd
+                                           ; SOURCE LINE # 60 
+0005 7F38           MOV    R7,#038H
+0007 120000  R      LCALL  _LcdWriteCmd
+                                           ; SOURCE LINE # 61 
+000A 7F38           MOV    R7,#038H
+000C 120000  R      LCALL  _LcdWriteCmd
+                                           ; SOURCE LINE # 62 
+000F 7F06           MOV    R7,#006H
+0011 120000  R      LCALL  _LcdWriteCmd
+                                           ; SOURCE LINE # 63 
+0014 7F0C           MOV    R7,#00CH
+0016 120000  R      LCALL  _LcdWriteCmd
+0019 22             RET    
+
+            ; FUNCTION LcdInit (END)
+
+            ; FUNCTION LcdBusy (BEGIN)
+                                           ; SOURCE LINE # 68 
+0000 D287           SETB   BS
+                                           ; SOURCE LINE # 69 
+0002 D293           SETB   EN
+                                           ; SOURCE LINE # 70 
+0004 C291           CLR    RS
+                                           ; SOURCE LINE # 71 
+0006 D292           SETB   RW
+0008         ?WHILE7:
+                                           ; SOURCE LINE # 72 
+0008 308706         JNB    BS,?NXT7
+                                           ; SOURCE LINE # 74 
+000B C293           CLR    EN
+                                           ; SOURCE LINE # 75 
+000D D293           SETB   EN
+000F 80F7           SJMP   ?WHILE7
+0011         ?NXT7:
+0011 22             RET    
+
+            ; FUNCTION LcdBusy (END)
+
+            ; FUNCTION _LcdWriteCmd (BEGIN)
+              ; Register R7 is assigned to parameter var
+                                           ; SOURCE LINE # 80 
+0000 8F80           MOV    P0,R7
+                                           ; SOURCE LINE # 81 
+0002 C291           CLR    RS
+                                           ; SOURCE LINE # 82 
+0004 C292           CLR    RW
+                                           ; SOURCE LINE # 83 
+0006 D293           SETB   EN
+                                           ; SOURCE LINE # 84 
+0008 C293           CLR    EN
+                                           ; SOURCE LINE # 85 
+000A 120000  R      LCALL  LcdBusy
+000D 22             RET    
+
+            ; FUNCTION _LcdWriteCmd (END)
+
+            ; FUNCTION _LcdWriteChar (BEGIN)
+              ; Register R7 is assigned to parameter var
+                                           ; SOURCE LINE # 89 
+0000 8F80           MOV    P0,R7
+                                           ; SOURCE LINE # 90 
+0002 D291           SETB   RS
+                                           ; SOURCE LINE # 91 
+0004 C292           CLR    RW
+                                           ; SOURCE LINE # 92 
+0006 D293           SETB   EN
+                                           ; SOURCE LINE # 93 
+0008 C293           CLR    EN
+                                           ; SOURCE LINE # 94 
+000A 120000  R      LCALL  LcdBusy
+000D 22             RET    
+
+            ; FUNCTION _LcdWriteChar (END)
+
+            ; FUNCTION _LcdWriteStr (BEGIN)
+              ; Register R0R4R5 is assigned to parameter var
+                                           ; SOURCE LINE # 99 
+0000 EB             MOV    A,R3
+0001 FD             MOV    R5,A
+0002 EA             MOV    A,R2
+0003 FC             MOV    R4,A
+0004 E9             MOV    A,R1
+0005 F8             MOV    R0,A
+0006         ?WHILE9:
+                                           ; SOURCE LINE # 98 
+0006 ED             MOV    A,R5
+0007 FB             MOV    R3,A
+0008 EC             MOV    A,R4
+0009 FA             MOV    R2,A
+000A E8             MOV    A,R0
+000B F9             MOV    R1,A
+000C 120000  R      LCALL  IPGN1?C
+000F 6015           JZ     ?NXT9
+                                           ; SOURCE LINE # 99 
+0011 ED             MOV    A,R5
+0012 FB             MOV    R3,A
+0013 EC             MOV    A,R4
+0014 FA             MOV    R2,A
+0015 E8             MOV    A,R0
+0016 F9             MOV    R1,A
+0017 08             INC    R0
+0018 E8             MOV    A,R0
+0019 7002           JNZ    ?LAB18
+001B 0C             INC    R4
+001C EC             MOV    A,R4
+001D         ?LAB18:
+001D 120000  R      LCALL  IPGN1?C
+0020 FF             MOV    R7,A
+0021 120000  R      LCALL  _LcdWriteChar
+0024 80E0           SJMP   ?WHILE9
+0026         ?NXT9:
+0026 22             RET    
+
+            ; FUNCTION _LcdWriteStr (END)
+
+            ; FUNCTION _LcdGotoXY (BEGIN)
+              ; Register R7 is assigned to parameter row
+              ; Register R5 is assigned to parameter col
+                                           ; SOURCE LINE # 104 
+0000 EF             MOV    A,R7
+0001 14             DEC    A
+0002 600A           JZ     ?CASE4
+0004 14             DEC    A
+0005 600F           JZ     ?CASE5
+0007 14             DEC    A
+0008 6014           JZ     ?CASE6
+000A 14             DEC    A
+000B 6019           JZ     ?CASE7
+000D 22             RET    
+000E         ?CASE4:
+                                           ; SOURCE LINE # 106 
+000E ED             MOV    A,R5
+000F 247F           ADD    A,#07FH
+0011 FF             MOV    R7,A
+0012 120000  R      LCALL  _LcdWriteCmd
+0015 22             RET    
+0016         ?CASE5:
+                                           ; SOURCE LINE # 107 
+0016 ED             MOV    A,R5
+0017 24BF           ADD    A,#0BFH
+0019 FF             MOV    R7,A
+001A 120000  R      LCALL  _LcdWriteCmd
+001D 22             RET    
+001E         ?CASE6:
+                                           ; SOURCE LINE # 108 
+001E ED             MOV    A,R5
+001F 2493           ADD    A,#093H
+0021 FF             MOV    R7,A
+0022 120000  R      LCALL  _LcdWriteCmd
+0025 22             RET    
+0026         ?CASE7:
+                                           ; SOURCE LINE # 109 
+0026 ED             MOV    A,R5
+0027 24D3           ADD    A,#0D3H
+0029 FF             MOV    R7,A
+002A 120000  R      LCALL  _LcdWriteCmd
+                                           ; SOURCE LINE # 110 
+002D 22             RET    
+
+            ; FUNCTION _LcdGotoXY (END)
+
+            ; FUNCTION LcdClear (BEGIN)
+                                           ; SOURCE LINE # 116 
+0000 7F01           MOV    R7,#001H
+0002 120000  R      LCALL  _LcdWriteCmd
+                                           ; SOURCE LINE # 117 
+0005 120000  R      LCALL  Delay5ms
+0008 22             RET    
+
+            ; FUNCTION LcdClear (END)
+
+            ; FUNCTION I2C_start (BEGIN)
+                                           ; SOURCE LINE # 122 
+0000 D297           SETB   I2C_SDA
+                                           ; SOURCE LINE # 123 
+0002 D296           SETB   I2C_SCL
+                                           ; SOURCE LINE # 124 
+0004 00             NOP    
+                                           ; SOURCE LINE # 125 
+0005 C297           CLR    I2C_SDA
+                                           ; SOURCE LINE # 126 
+0007 00             NOP    
+                                           ; SOURCE LINE # 127 
+0008 C296           CLR    I2C_SCL
+000A 22             RET    
+
+            ; FUNCTION I2C_start (END)
+
+            ; FUNCTION I2C_stop (BEGIN)
+                                           ; SOURCE LINE # 132 
+0000 C297           CLR    I2C_SDA
+                                           ; SOURCE LINE # 133 
+0002 00             NOP    
+                                           ; SOURCE LINE # 134 
+0003 D296           SETB   I2C_SCL
+                                           ; SOURCE LINE # 135 
+0005 00             NOP    
+                                           ; SOURCE LINE # 136 
+0006 D297           SETB   I2C_SDA
+0008 22             RET    
+
+            ; FUNCTION I2C_stop (END)
+
+            ; FUNCTION _I2C_write (BEGIN)
+              ; Register R7 is assigned to parameter dat
+              ; R6 is assigned to i
+                                           ; SOURCE LINE # 143 
+0000 7E00           MOV    R6,#000H
+0002         ?FOR1:
+                                           ; SOURCE LINE # 145 
+0002 EF             MOV    A,R7
+0003 5480           ANL    A,#080H
+0005 24FF           ADD    A,#0FFH
+0007 9297           MOV    I2C_SDA,C
+                                           ; SOURCE LINE # 146 
+0009 D296           SETB   I2C_SCL
+                                           ; SOURCE LINE # 147 
+000B 00             NOP    
+                                           ; SOURCE LINE # 148 
+000C C296           CLR    I2C_SCL
+                                           ; SOURCE LINE # 149 
+000E EF             MOV    A,R7
+000F C3             CLR    C
+0010 33             RLC    A
+0011 FF             MOV    R7,A
+                                           ; SOURCE LINE # 143 
+0012 0E             INC    R6
+0013 BE08EC         CJNE   R6,#008H,?FOR1
+                                           ; SOURCE LINE # 152 
+0016 D297           SETB   I2C_SDA
+                                           ; SOURCE LINE # 153 
+0018 00             NOP    
+                                           ; SOURCE LINE # 154 
+0019 D296           SETB   I2C_SCL
+                                           ; SOURCE LINE # 155 
+001B 00             NOP    
+                                           ; SOURCE LINE # 156 
+001C A297           MOV    C,I2C_SDA
+001E 9200    R      MOV    data_bit,C
+                                           ; SOURCE LINE # 157 
+0020 C296           CLR    I2C_SCL
+                                           ; SOURCE LINE # 158 
+0022 22             RET    
+
+            ; FUNCTION _I2C_write (END)
+
+            ; FUNCTION I2C_read (BEGIN)
+              ; R6 is assigned to dat
+                                           ; SOURCE LINE # 164 
+0000 E4             CLR    A
+0001 FE             MOV    R6,A
+0002 FF             MOV    R7,A
+              ; R7 is assigned to i
+0003         ?FOR3:
+                                           ; SOURCE LINE # 167 
+0003 00             NOP    
+                                           ; SOURCE LINE # 168 
+0004 D296           SETB   I2C_SCL
+                                           ; SOURCE LINE # 169 
+0006 00             NOP    
+                                           ; SOURCE LINE # 170 
+0007 A297           MOV    C,I2C_SDA
+0009 9200    R      MOV    rd_bit,C
+                                           ; SOURCE LINE # 171 
+000B EE             MOV    A,R6
+000C C3             CLR    C
+000D 33             RLC    A
+000E FE             MOV    R6,A
+                                           ; SOURCE LINE # 172 
+000F A200    R      MOV    C,rd_bit
+0011 E4             CLR    A
+0012 33             RLC    A
+0013 2E             ADD    A,R6
+0014 FE             MOV    R6,A
+                                           ; SOURCE LINE # 173 
+0015 C296           CLR    I2C_SCL
+                                           ; SOURCE LINE # 165 
+0017 0F             INC    R7
+0018 BF08E8         CJNE   R7,#008H,?FOR3
+                                           ; SOURCE LINE # 176 
+001B D297           SETB   I2C_SDA
+                                           ; SOURCE LINE # 177 
+001D 00             NOP    
+                                           ; SOURCE LINE # 178 
+001E D296           SETB   I2C_SCL
+                                           ; SOURCE LINE # 179 
+0020 00             NOP    
+                                           ; SOURCE LINE # 180 
+0021 C296           CLR    I2C_SCL
+                                           ; SOURCE LINE # 182 
+0023 FF             MOV    R7,A
+0024 22             RET    
+
+            ; FUNCTION I2C_read (END)
+
+            ; FUNCTION SD_Read (BEGIN)
+                                           ; SOURCE LINE # 187 
+0000 120000  R      LCALL  I2C_start
+                                           ; SOURCE LINE # 188 
+0003 7FA5           MOV    R7,#0A5H
+0005 120000  R      LCALL  _I2C_write
+              ; R5 is assigned to dat
+                                           ; SOURCE LINE # 189 
+0008 120000  R      LCALL  I2C_read
+                                           ; SOURCE LINE # 190 
+000B 120000  R      LCALL  I2C_stop
+                                           ; SOURCE LINE # 192 
+000E 22             RET    
+
+            ; FUNCTION SD_Read (END)
+
+            ; FUNCTION _SD_Write (BEGIN)
+              ; Register R5 is assigned to parameter val
+                                           ; SOURCE LINE # 201 
+0000 8F05           MOV    AR5,R7
+                                           ; SOURCE LINE # 197 
+0002 120000  R      LCALL  I2C_start
+                                           ; SOURCE LINE # 198 
+0005 7FA4           MOV    R7,#0A4H
+0007 120000  R      LCALL  _I2C_write
+                                           ; SOURCE LINE # 199 
+000A 8D07           MOV    AR7,R5
+000C 120000  R      LCALL  _I2C_write
+                                           ; SOURCE LINE # 200 
+000F 120000  R      LCALL  I2C_stop
+0012         ?WHILE11:
+                                           ; SOURCE LINE # 201 
+0012 2095FD         JB     I2C_BUSY,?WHILE11
+0015 22             RET    
+
+            ; FUNCTION _SD_Write (END)
+
+            ; FUNCTION main (BEGIN)
+                                           ; SOURCE LINE # 15 
+0000 758911         MOV    TMOD,#011H
+                                           ; SOURCE LINE # 17 
+0003 D288           SETB   IT0
+                                           ; SOURCE LINE # 18 
+0005 D2A8           SETB   EX0
+                                           ; SOURCE LINE # 19 
+0007 D2AF           SETB   EA
+                                           ; SOURCE LINE # 21 
+0009 120000  R      LCALL  LcdInit
+                                           ; SOURCE LINE # 22 
+000C 7F01           MOV    R7,#001H
+000E 7D01           MOV    R5,#001H
+0010 120000  R      LCALL  _LcdGotoXY
+                                           ; SOURCE LINE # 23 
+0013 120000  R      LCALL  Delay5ms
+0016         ?WHILE15:
+                                           ; SOURCE LINE # 25 
+0016 309405         JNB    I2C_READY,?NXT26
+                                           ; SOURCE LINE # 26 
+0019 120000  R      LCALL  SD_Read
+001C 80F8           SJMP   ?WHILE15
+001E         ?NXT26:
+                                           ; SOURCE LINE # 27 
+001E 7F49           MOV    R7,#049H
+0020 120000  R      LCALL  _LcdWriteChar
+                                           ; SOURCE LINE # 29 
+0023 75D800         MOV    CCON,#000H
+                                           ; SOURCE LINE # 30 
+0026 75D900         MOV    CMOD,#000H
+                                           ; SOURCE LINE # 31 
+0029 75DB21         MOV    CCAPM1,#021H
+                                           ; SOURCE LINE # 33 
+002C E4             CLR    A
+002D F500    R      MOV    state,A
+                                           ; SOURCE LINE # 34 
+002F D200    R      SETB   isInit
+0031         ?WHILE16:
+                                           ; SOURCE LINE # 38 
+0031 E500    R      MOV    A,state
+0033 600B           JZ     ?CASE12
+0035 14             DEC    A
+0036 600F           JZ     ?CASE13
+0038 14             DEC    A
+0039 6022           JZ     ?CASE14
+003B 14             DEC    A
+003C 6032           JZ     ?CASE15
+003E 80F1           SJMP   ?WHILE16
+0040         ?CASE12:
+                                           ; SOURCE LINE # 41 
+0040 7F41           MOV    R7,#041H
+0042 120000  R      LCALL  _LcdWriteChar
+                                           ; SOURCE LINE # 42 
+0045 80EA           SJMP   ?WHILE16
+0047         ?CASE13:
+                                           ; SOURCE LINE # 45 
+0047 75DB00         MOV    CCAPM1,#000H
+004A         ?WHILE17:
+                                           ; SOURCE LINE # 46 
+004A 120000  R      LCALL  SD_Read
+004D BF0DFA         CJNE   R7,#00DH,?WHILE17
+                                           ; SOURCE LINE # 47 
+0050 75DB21         MOV    CCAPM1,#021H
+                                           ; SOURCE LINE # 48 
+0053 7F42           MOV    R7,#042H
+0055 120000  R      LCALL  _LcdWriteChar
+                                           ; SOURCE LINE # 49 
+0058 850000  R      MOV    state,Next
+                                           ; SOURCE LINE # 50 
+005B 80D4           SJMP   ?WHILE16
+005D         ?CASE14:
+                                           ; SOURCE LINE # 53 
+005D 7B05           MOV    R3,#005H
+005F 7A00    R      MOV    R2,#000H
+0061 7900    R      MOV    R1,#000H
+0063 120000  R      LCALL  _SD_WriteCmd
+                                           ; SOURCE LINE # 54 
+0066 7F43           MOV    R7,#043H
+0068 120000  R      LCALL  _LcdWriteChar
+                                           ; SOURCE LINE # 55 
+006B 750003  R      MOV    Next,#003H
+                                           ; SOURCE LINE # 56 
+006E 80C1           SJMP   ?WHILE16
+0070         ?CASE15:
+                                           ; SOURCE LINE # 58 
+0070 7F44           MOV    R7,#044H
+0072 120000  R      LCALL  _LcdWriteChar
+                                           ; SOURCE LINE # 59 
+0075 80BA           SJMP   ?WHILE16
+
+            ; FUNCTION main (END)
+
+            ; FUNCTION PCATimers (BEGIN)
+                                           ; SOURCE LINE # 71 
+0000 C0D0           PUSH   PSW
+0002 75D008         MOV    PSW,#008H
+                                           ; SOURCE LINE # 67 
+0005 300008  R      JNB    isInit,?NXT33
+0008 30D905         JNB    CCF1,?NXT33
+                                           ; SOURCE LINE # 69 
+000B C2D9           CLR    CCF1
+                                           ; SOURCE LINE # 71 
+000D 750001  R      MOV    state,#001H
+0010         ?NXT33:
+0010 D0D0           POP    PSW
+0012 32             RETI   
+
+            ; FUNCTION PCATimers (END)
+
+            ; FUNCTION KeyInterrupt (BEGIN)
+                                           ; SOURCE LINE # 208 
+0000 C0E0           PUSH   ACC
+0002 C0F0           PUSH   B
+0004 C083           PUSH   DPH
+0006 C082           PUSH   DPL
+0008 C0D0           PUSH   PSW
+000A C000           PUSH   AR0
+000C C001           PUSH   AR1
+000E C002           PUSH   AR2
+0010 C003           PUSH   AR3
+0012 C004           PUSH   AR4
+0014 C005           PUSH   AR5
+0016 C006           PUSH   AR6
+0018 C007           PUSH   AR7
+                                           ; SOURCE LINE # 77 
+001A E5A0           MOV    A,P2
+001C 541F           ANL    A,#01FH
+001E F500    R      MOV    Key,A
+                                           ; SOURCE LINE # 78 
+0020 200003  R      JB     isInit,$ + 6
+0023 020000  R      LJMP   ?NXT79
+                                           ; SOURCE LINE # 80 
+0026 E500    R      MOV    A,Key
+0028 2400           ADD    A,#000H
+002A B40D00         CJNE   A,#00DH,?LAB76
+002D         ?LAB76:
+002D 4003           JC     $ + 5
+002F 020000  R      LJMP   ?NXT58
+0032 FA             MOV    R2,A
+0033 23             RL     A
+0034 2A             ADD    A,R2
+0035 900000  R      MOV    DPTR,#?LAB77
+0038 73             JMP    @A+DPTR
+0039         ?LAB77:
+0039 020000  R      LJMP   ?CASE27
+003C 020000  R      LJMP   ?CASE28
+003F 020000  R      LJMP   ?CASE29
+0042 020000  R      LJMP   ?CASE30
+0045 020000  R      LJMP   ?CASE31
+0048 020000  R      LJMP   ?CASE32
+004B 020000  R      LJMP   ?CASE33
+004E 020000  R      LJMP   ?CASE34
+0051 020000  R      LJMP   ?NXT58
+0054 020000  R      LJMP   ?NXT58
+0057 020000  R      LJMP   ?NXT58
+005A 020000  R      LJMP   ?NXT58
+005D 020000  R      LJMP   ?CASE37
+0060 020000  R      LJMP   ?NXT79
+0063         ?CASE27:
+                                           ; SOURCE LINE # 83 
+0063 120000  R      LCALL  LcdClear
+                                           ; SOURCE LINE # 84 
+0066 120000  R      LCALL  SD_Read
+0069 120000  R      LCALL  _LcdWriteChar
+                                           ; SOURCE LINE # 85 
+006C 120000  R      LCALL  SD_Read
+006F 120000  R      LCALL  _LcdWriteChar
+                                           ; SOURCE LINE # 86 
+0072 120000  R      LCALL  SD_Read
+0075 120000  R      LCALL  _LcdWriteChar
+                                           ; SOURCE LINE # 87 
+0078 120000  R      LCALL  SD_Read
+007B 120000  R      LCALL  _LcdWriteChar
+                                           ; SOURCE LINE # 88 
+007E 020000  R      LJMP   ?NXT79
+0081         ?CASE28:
+                                           ; SOURCE LINE # 90 
+0081 750002  R      MOV    Next,#002H
+                                           ; SOURCE LINE # 91 
+0084 D2AE           SETB   EC
+                                           ; SOURCE LINE # 92 
+0086 7B05           MOV    R3,#005H
+0088 7A00    R      MOV    R2,#000H
+008A 7900    R      MOV    R1,#000H
+008C 120000  R      LCALL  _SD_WriteCmd
+                                           ; SOURCE LINE # 93 
+008F 020000  R      LJMP   ?NXT79
+0092         ?CASE29:
+                                           ; SOURCE LINE # 95 
+0092 7B05           MOV    R3,#005H
+0094 7A00    R      MOV    R2,#000H
+0096 7900    R      MOV    R1,#000H
+0098 120000  R      LCALL  _SD_WriteCmd
+                                           ; SOURCE LINE # 96 
+009B 020000  R      LJMP   ?NXT79
+009E         ?CASE30:
+                                           ; SOURCE LINE # 98 
+009E 7B05           MOV    R3,#005H
+00A0 7A00    R      MOV    R2,#000H
+00A2 7900    R      MOV    R1,#000H
+00A4 120000  R      LCALL  _SD_WriteCmd
+                                           ; SOURCE LINE # 99 
+00A7 020000  R      LJMP   ?NXT79
+00AA         ?CASE31:
+                                           ; SOURCE LINE # 101 
+00AA 7B05           MOV    R3,#005H
+00AC 7A00    R      MOV    R2,#000H
+00AE 7900    R      MOV    R1,#000H
+00B0 120000  R      LCALL  _SD_WriteCmd
+                                           ; SOURCE LINE # 102 
+00B3 020000  R      LJMP   ?NXT79
+00B6         ?CASE32:
+                                           ; SOURCE LINE # 106 
+00B6 7B05           MOV    R3,#005H
+00B8 7A00    R      MOV    R2,#000H
+00BA 7900    R      MOV    R1,#000H
+00BC 120000  R      LCALL  _SD_WriteCmd
+                                           ; SOURCE LINE # 107 
+00BF 020000  R      LJMP   ?NXT79
+00C2         ?CASE33:
+                                           ; SOURCE LINE # 109 
+00C2 7B05           MOV    R3,#005H
+00C4 7A00    R      MOV    R2,#000H
+00C6 7900    R      MOV    R1,#000H
+00C8 120000  R      LCALL  _SD_WriteCmd
+                                           ; SOURCE LINE # 110 
+00CB 020000  R      LJMP   ?NXT79
+00CE         ?CASE34:
+                                           ; SOURCE LINE # 112 
+00CE 7F53           MOV    R7,#053H
+00D0 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 113 
+00D3 7F44           MOV    R7,#044H
+00D5 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 114 
+00D8 7F0D           MOV    R7,#00DH
+00DA 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 115 
+00DD E4             CLR    A
+00DE F500    R      MOV    dly,A
+00E0 F500    R      MOV    dly+01H,A
+00E2         ?FOR11:
+00E2 E500    R      MOV    A,dly
+00E4 B40005         CJNE   A,#000H,?LAB78
+00E7 E500    R      MOV    A,dly+01H
+00E9 B46400         CJNE   A,#064H,?LAB78
+00EC         ?LAB78:
+00EC 500D           JNC    ?WHILE24
+                                           ; SOURCE LINE # 116 
+00EE 120000  R      LCALL  Delay30ms
+                                           ; SOURCE LINE # 115 
+00F1 0500    R      INC    dly+01H
+00F3 E500    R      MOV    A,dly+01H
+00F5 70EB           JNZ    ?FOR11
+00F7 0500    R      INC    dly
+00F9 80E7           SJMP   ?FOR11
+00FB         ?WHILE24:
+                                           ; SOURCE LINE # 117 
+00FB 309405         JNB    I2C_READY,?NXT61
+                                           ; SOURCE LINE # 118 
+00FE 120000  R      LCALL  SD_Read
+0101 80F8           SJMP   ?WHILE24
+0103         ?NXT61:
+                                           ; SOURCE LINE # 120 
+0103 7F46           MOV    R7,#046H
+0105 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 121 
+0108 7F4D           MOV    R7,#04DH
+010A 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 122 
+010D 7F20           MOV    R7,#020H
+010F 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 123 
+0112 7F53           MOV    R7,#053H
+0114 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 124 
+0117 7F0D           MOV    R7,#00DH
+0119 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 125 
+011C E4             CLR    A
+011D F500    R      MOV    dly,A
+011F F500    R      MOV    dly+01H,A
+0121         ?FOR12:
+0121 E500    R      MOV    A,dly
+0123 B40005         CJNE   A,#000H,?LAB81
+0126 E500    R      MOV    A,dly+01H
+0128 B46400         CJNE   A,#064H,?LAB81
+012B         ?LAB81:
+012B 500D           JNC    ?WHILE25
+                                           ; SOURCE LINE # 126 
+012D 120000  R      LCALL  Delay30ms
+                                           ; SOURCE LINE # 115 
+0130 0500    R      INC    dly+01H
+0132 E500    R      MOV    A,dly+01H
+0134 70EB           JNZ    ?FOR12
+0136 0500    R      INC    dly
+0138 80E7           SJMP   ?FOR12
+013A         ?WHILE25:
+                                           ; SOURCE LINE # 127 
+013A 309405         JNB    I2C_READY,?NXT64
+                                           ; SOURCE LINE # 128 
+013D 120000  R      LCALL  SD_Read
+0140 80F8           SJMP   ?WHILE25
+0142         ?NXT64:
+                                           ; SOURCE LINE # 131 
+0142 7F4F           MOV    R7,#04FH
+0144 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 132 
+0147 7F46           MOV    R7,#046H
+0149 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 133 
+014C 7F20           MOV    R7,#020H
+014E 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 134 
+0151 7F30           MOV    R7,#030H
+0153 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 135 
+0156 7F57           MOV    R7,#057H
+0158 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 136 
+015B 7F3E           MOV    R7,#03EH
+015D 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 137 
+0160 7F54           MOV    R7,#054H
+0162 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 138 
+0165 7F45           MOV    R7,#045H
+0167 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 139 
+016A 7F53           MOV    R7,#053H
+016C 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 140 
+016F 7F54           MOV    R7,#054H
+0171 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 141 
+0174 7F2E           MOV    R7,#02EH
+0176 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 142 
+0179 7F54           MOV    R7,#054H
+017B 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 143 
+017E 7F58           MOV    R7,#058H
+0180 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 144 
+0183 7F54           MOV    R7,#054H
+0185 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 145 
+0188 7F0D           MOV    R7,#00DH
+018A 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 146 
+018D E4             CLR    A
+018E F500    R      MOV    dly,A
+0190 F500    R      MOV    dly+01H,A
+0192         ?FOR13:
+0192 E500    R      MOV    A,dly
+0194 B40005         CJNE   A,#000H,?LAB84
+0197 E500    R      MOV    A,dly+01H
+0199 B46400         CJNE   A,#064H,?LAB84
+019C         ?LAB84:
+019C 500D           JNC    ?WHILE26
+                                           ; SOURCE LINE # 147 
+019E 120000  R      LCALL  Delay30ms
+                                           ; SOURCE LINE # 115 
+01A1 0500    R      INC    dly+01H
+01A3 E500    R      MOV    A,dly+01H
+01A5 70EB           JNZ    ?FOR13
+01A7 0500    R      INC    dly
+01A9 80E7           SJMP   ?FOR13
+01AB         ?WHILE26:
+                                           ; SOURCE LINE # 148 
+01AB 309405         JNB    I2C_READY,?NXT67
+                                           ; SOURCE LINE # 149 
+01AE 120000  R      LCALL  SD_Read
+01B1 80F8           SJMP   ?WHILE26
+01B3         ?NXT67:
+                                           ; SOURCE LINE # 151 
+01B3 7F57           MOV    R7,#057H
+01B5 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 152 
+01B8 7F46           MOV    R7,#046H
+01BA 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 153 
+01BD 7F20           MOV    R7,#020H
+01BF 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 154 
+01C2 7F30           MOV    R7,#030H
+01C4 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 155 
+01C7 7F3E           MOV    R7,#03EH
+01C9 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 159 
+01CC 7F36           MOV    R7,#036H
+01CE 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 160 
+01D1 7F34           MOV    R7,#034H
+01D3 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 161 
+01D6 7F0D           MOV    R7,#00DH
+01D8 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 162 
+01DB E4             CLR    A
+01DC F500    R      MOV    dly,A
+01DE F500    R      MOV    dly+01H,A
+01E0         ?FOR14:
+01E0 E500    R      MOV    A,dly
+01E2 B40005         CJNE   A,#000H,?LAB87
+01E5 E500    R      MOV    A,dly+01H
+01E7 B46400         CJNE   A,#064H,?LAB87
+01EA         ?LAB87:
+01EA 500D           JNC    ?WHILE27
+                                           ; SOURCE LINE # 163 
+01EC 120000  R      LCALL  Delay30ms
+                                           ; SOURCE LINE # 115 
+01EF 0500    R      INC    dly+01H
+01F1 E500    R      MOV    A,dly+01H
+01F3 70EB           JNZ    ?FOR14
+01F5 0500    R      INC    dly
+01F7 80E7           SJMP   ?FOR14
+01F9         ?WHILE27:
+                                           ; SOURCE LINE # 164 
+01F9 309405         JNB    I2C_READY,?NXT70
+                                           ; SOURCE LINE # 165 
+01FC 120000  R      LCALL  SD_Read
+01FF 80F8           SJMP   ?WHILE27
+0201         ?NXT70:
+                                           ; SOURCE LINE # 167 
+0201 E4             CLR    A
+0202 F500    R      MOV    h,A
+0204 F500    R      MOV    h+01H,A
+0206         ?FOR15:
+0206 E500    R      MOV    A,h
+0208 B40005         CJNE   A,#000H,?LAB90
+020B E500    R      MOV    A,h+01H
+020D B46400         CJNE   A,#064H,?LAB90
+0210         ?LAB90:
+0210 501A           JNC    ?NXT71
+                                           ; SOURCE LINE # 168 
+0212 AE00    R      MOV    R6,h
+0214 AF00    R      MOV    R7,h+01H
+0216 E4             CLR    A
+0217 FC             MOV    R4,A
+0218 7DFF           MOV    R5,#0FFH
+021A 120000  R      LCALL  ?C_UIDIV
+021D 8D07           MOV    AR7,R5
+021F 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 167 
+0222 0500    R      INC    h+01H
+0224 E500    R      MOV    A,h+01H
+0226 70DE           JNZ    ?FOR15
+0228 0500    R      INC    h
+022A 80DA           SJMP   ?FOR15
+022C         ?NXT71:
+                                           ; SOURCE LINE # 169 
+022C E4             CLR    A
+022D F500    R      MOV    dly,A
+022F F500    R      MOV    dly+01H,A
+0231         ?FOR16:
+0231 E500    R      MOV    A,dly
+0233 B40005         CJNE   A,#000H,?LAB93
+0236 E500    R      MOV    A,dly+01H
+0238 B46400         CJNE   A,#064H,?LAB93
+023B         ?LAB93:
+023B 500D           JNC    ?WHILE28
+                                           ; SOURCE LINE # 170 
+023D 120000  R      LCALL  Delay30ms
+                                           ; SOURCE LINE # 115 
+0240 0500    R      INC    dly+01H
+0242 E500    R      MOV    A,dly+01H
+0244 70EB           JNZ    ?FOR16
+0246 0500    R      INC    dly
+0248 80E7           SJMP   ?FOR16
+024A         ?WHILE28:
+                                           ; SOURCE LINE # 171 
+024A 309405         JNB    I2C_READY,?NXT75
+                                           ; SOURCE LINE # 172 
+024D 120000  R      LCALL  SD_Read
+0250 80F8           SJMP   ?WHILE28
+0252         ?NXT75:
+                                           ; SOURCE LINE # 191 
+0252 7F43           MOV    R7,#043H
+0254 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 192 
+0257 7F46           MOV    R7,#046H
+0259 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 193 
+025C 7F20           MOV    R7,#020H
+025E 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 194 
+0261 7F30           MOV    R7,#030H
+0263 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 195 
+0266 7F0D           MOV    R7,#00DH
+0268 120000  R      LCALL  _SD_Write
+                                           ; SOURCE LINE # 196 
+026B E4             CLR    A
+026C F500    R      MOV    dly,A
+026E F500    R      MOV    dly+01H,A
+0270         ?FOR17:
+0270 E500    R      MOV    A,dly
+0272 B40005         CJNE   A,#000H,?LAB96
+0275 E500    R      MOV    A,dly+01H
+0277 B46400         CJNE   A,#064H,?LAB96
+027A         ?LAB96:
+027A 500D           JNC    ?WHILE29
+                                           ; SOURCE LINE # 197 
+027C 120000  R      LCALL  Delay30ms
+                                           ; SOURCE LINE # 115 
+027F 0500    R      INC    dly+01H
+0281 E500    R      MOV    A,dly+01H
+0283 70EB           JNZ    ?FOR17
+0285 0500    R      INC    dly
+0287 80E7           SJMP   ?FOR17
+0289         ?WHILE29:
+                                           ; SOURCE LINE # 198 
+0289 309405         JNB    I2C_READY,?NXT78
+                                           ; SOURCE LINE # 199 
+028C 120000  R      LCALL  SD_Read
+028F 80F8           SJMP   ?WHILE29
+0291         ?NXT78:
+                                           ; SOURCE LINE # 200 
+0291 7F37           MOV    R7,#037H
+0293 120000  R      LCALL  _LcdWriteChar
+                                           ; SOURCE LINE # 201 
+0296 8003           SJMP   ?NXT79
+0298         ?CASE37:
+                                           ; SOURCE LINE # 207 
+0298 120000  R      LCALL  LcdClear
+029B         ?NXT58:
+
+029B         ?NXT79:
+                                           ; SOURCE LINE # 208 
+029B D007           POP    AR7
+029D D006           POP    AR6
+029F D005           POP    AR5
+02A1 D004           POP    AR4
+02A3 D003           POP    AR3
+02A5 D002           POP    AR2
+02A7 D001           POP    AR1
+02A9 D000           POP    AR0
+02AB D0D0           POP    PSW
+02AD D082           POP    DPL
+02AF D083           POP    DPH
+02B1 D0F0           POP    B
+02B3 D0E0           POP    ACC
+02B5 32             RETI   
+
+            ; FUNCTION KeyInterrupt (END)
+
+C51 COMPILER V6.11.4C,  MAIN1                     01/08/110  15:04:58  PAGE  3
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+Key. . . . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0000H   1    
+state. . . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0001H   1    
+Next . . . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0002H   1    
+dly. . . . . . . . . . . . . . . . . .  PUBLIC  DATA    U_INT  0003H   2    
+h. . . . . . . . . . . . . . . . . . .  PUBLIC  DATA    U_INT  0005H   2    
+isInit . . . . . . . . . . . . . . . .  PUBLIC  DATA    BIT     0000H   1    
+sdRead_Start . . . . . . . . . . . . .  PUBLIC  DATA    BIT     0001H   1    
+sdRead_End . . . . . . . . . . . . . .  PUBLIC  DATA    BIT     0002H   1    
+SD_WriteCmd. . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+  cmd?068. . . . . . . . . . . . . . .  PARAM   DATA    PTR     0000H   3    
+  cmd?068. . . . . . . . . . . . . . .  PARAM   DATA    PTR     0000H   3    
+Delay5ms . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+Delay30ms. . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+LcdInit. . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+LcdBusy. . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+LcdWriteCmd. . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+  var?071. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+  var?071. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+LcdWriteChar . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+  var?072. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+  var?072. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+LcdWriteStr. . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+  var?073. . . . . . . . . . . . . . .  PARAM   DATA    PTR     0000H   3    
+  var?073. . . . . . . . . . . . . . .  PARAM   DATA    PTR     0000H   3    
+LcdGotoXY. . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+  row?074. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+  col?075. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0001H   1    
+  row?074. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+  col?075. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0001H   1    
+LcdClear . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+I2C_start. . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+I2C_stop . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+I2C_write. . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+  dat?079. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+  dat?079. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+data_bit?080 . . . . . . . . . . . . .  PUBLIC  DATA    BIT     0000H   1    
+i?081. . . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0000H   1    
+I2C_read . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+rd_bit?083 . . . . . . . . . . . . . .  PUBLIC  DATA    BIT     0000H   1    
+i?084. . . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0000H   1    
+dat?085. . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0000H   1    
+SD_Read. . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+dat?087. . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0000H   1    
+SD_Write . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+  val?088. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+  val?088. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+main . . . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+PCATimers. . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+KeyInterrupt . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+C51 COMPILER V6.11.4C,  MAIN1                     01/08/110  15:04:58  PAGE  4
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1194    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      7       4
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      3       2
+END OF MODULE INFORMATION.
+
+C51 COMPILATION COMPLETE.  0 WARNING,  0 ERROR

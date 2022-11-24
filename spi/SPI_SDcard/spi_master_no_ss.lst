@@ -1,0 +1,718 @@
+C51 COMPILER V6.11.4C,  SPI_MASTER_NO_SS          01/22/110  14:08:04  PAGE  1
+
+QCW(0x00002D1A)
+
+WIN32 C51 COMPILER V6.11.4C, COMPILATION OF MODULE SPI_MASTER_NO_SS
+OBJECT MODULE PLACED IN f:\p\sd\spi\spi_sdcard\spi_master_no_ss.obj
+COMPILER INVOKED BY: C51.EXE F:\P\SD\SPI\SPI_SDCARD\SPI_MASTER_NO_SS.C OBJECT(F:
+            -\P\SD\SPI\SPI_SDCARD\SPI_MASTER_NO_SS.OBJ) PIN(C:\FSI\INC) NOAM PR(
+            -F:\P\SD\SPI\SPI_SDCARD\SPI_MASTER_NO_SS.LST) CD SB OE(1) SM FP(NOFL
+            -OAT) PW(80) 
+
+stmt level    source
+   1          #include "at89c51rc2.h"
+   2          unsigned char serial_data,cnt;
+   3          unsigned char data_example=0x55;
+   4          unsigned char data_save;
+   5          bit transmit_completed= 0,isInit=0;
+   6          unsigned char Key1;
+   7          unsigned char count;
+   8          //sbit P11 = P1^1;
+   9          //LCD Interfacing Pins
+  10          sbit RS = P1^1; 
+  11          sbit RW = P1^2;
+  12          sbit EN = P1^3;
+  13          sbit BS = P0^7;
+  14          //Clear Display Command
+  15          const unsigned char CMD_CLR = 0x01;
+  16          //Return Home Command
+  17          const unsigned char CMD_HOM = 0x02;
+  18          //Entry Mode Set Commands
+  19          const unsigned char CMD_ETR = 0x04;
+  20          const unsigned char CMD_ETR_S = 0x01;
+  21          const unsigned char CMD_ETR_ID = 0x02;
+  22          //Display On  Off Control Commands
+  23          const unsigned char CMD_DSP = 0x08;
+  24          const unsigned char CMD_DSP_B = 0x01;
+  25          const unsigned char CMD_DSP_C = 0x02;
+  26          const unsigned char CMD_DSP_D = 0x04;
+  27          //Cursor & Display Shift Commands
+  28          const unsigned char CMD_SHT = 0x10;
+  29          const unsigned char CMD_SHT_RL = 0x04;
+  30          const unsigned char CMD_SHT_SC = 0x08;
+  31          //Function Set Commands
+  32          const unsigned char CMD_FN = 0x20;
+  33          const unsigned char CMD_FN_F = 0x04;
+  34          const unsigned char CMD_FN_N = 0x08;
+  35          const unsigned char CMD_FN_DL = 0x10;
+  36          //Set CG RAM Address Command
+  37          const unsigned char CMD_CG_RAM = 0x40;
+  38          //Set DD RAM Address Command
+  39          const unsigned char CMD_DD_RAM = 0x80;
+  40          //Function Prototypes
+  41          void LcdInit();
+  42          void LcdBusy(void);
+  43          void LcdWriteCmd(unsigned char c);
+  44          void LcdWriteChar(unsigned char var);
+  45          void LcdWriteStr(unsigned char *var);
+  46          void LcdGotoXY(unsigned char r,unsigned char c);
+  47          //Function Definitions
+  48          void LcdInit()
+  49          {
+  50   1         LcdWriteCmd(CMD_FN|CMD_FN_DL|CMD_FN_N);	//Function Set 0x38
+  51   1         LcdWriteCmd(CMD_FN|CMD_FN_DL|CMD_FN_N);	//Function Set
+  52   1         LcdWriteCmd(CMD_FN|CMD_FN_DL|CMD_FN_N);	//Function Set
+  53   1      	LcdWriteCmd(CMD_ETR|CMD_ETR_ID);				//Entry Mode Set 0x06
+  54   1         LcdWriteCmd(CMD_DSP|CMD_DSP_D);				//Display On  Off Control 0x
+            -0C
+  55   1      }
+  56          void LcdBusy()
+  57          {
+  58   1      	BS   = 1;			//Make D7th bit of LCD as i/p
+  59   1         EN   = 1;         //Make port pin as o/p
+  60   1         RS   = 0;         //Selected command register
+  61   1         RW   = 1;         //We are reading
+  62   1         while(BS)
+  63   1         {   					//read busy flag again and again till it becomes 0 Ena
+            -ble H->L
+  64   2         	EN   = 0;
+  65   2            EN   = 1;
+  66   2         }
+  67   1      }
+  68          void LcdWriteCmd(unsigned char var)
+  69          {
+  70   1      	P0 = var;      	//Commands to be Written
+  71   1         RS   = 0;        	//Selected command register
+  72   1         RW   = 0;        	//We are writing in instruction register
+  73   1         EN   = 1;        	//Enable H->L
+  74   1         EN   = 0;
+  75   1         LcdBusy();      //Wait for LCD to process the command
+  76   1      }
+  77          void LcdWriteChar(unsigned char var)
+  78          {
+  79   1      	P0 = var;      	//Data/Character to be Written
+  80   1         RS   = 1;         //Selected data register
+  81   1         RW   = 0;         //We are writing
+  82   1         EN   = 1;         //Enable H->L
+  83   1         EN   = 0;
+  84   1         LcdBusy();      //Wait for LCD to process the command
+  85   1      }
+  86          void LcdWriteStr(unsigned char *var)
+  87          {
+  88   1      	while(*var)       //till string ends send characters one by one
+  89   1         	LcdWriteChar(*var++);
+  90   1      }
+  91          
+  92          void LcdGotoXY(unsigned char row, unsigned char col)
+  93          {
+  94   1      	LcdWriteCmd(CMD_DD_RAM | (row << 6) | col);
+  95   1      }
+  96          
+  97          void main(void)
+  98          {
+  99   1      LcdInit();
+ 100   1      LcdWriteCmd(0x01);
+ 101   1      LcdWriteStr("Insha Allah!");
+
+WARNING 451 IN LINE 101 OF spi_master_no_ss.c : Assignment between pointers to 
+            -char signed and unsigned
+ 102   1      IT0 = 1;
+ 103   1      EX0 = 1;
+ 104   1      SPCON |= 0x10;                /* Master mode */
+ 105   1      SPCON |= 0x82;                /* Fclk Periph/128 */
+ 106   1      SPCON |= 0x20;                /* P1.1 is available as standard I/O
+            - pin */
+ 107   1      //SPCON &= ~0x08;               /* CPOL=0; transmit mode example *
+            -/
+ 108   1      SPCON |= 0x08;               /* CPOL=1; IDLE HIGH */
+ 109   1      //SPCON |= 0x04;                /* CPHA=1; transmit mode example *
+            -/
+ 110   1      SPCON &= ~0x04;                /* CPHA=0; POSITIVE EDGE TRIGGERED 
+            -*/
+ 111   1      IEN1 |= 0x04;                 /* enable spi interrupt */
+ 112   1      
+ 113   1      
+ 114   1      CMOD = 0x03;
+ 115   1      CH = 0;
+ 116   1      CL = 0;
+ 117   1      CCAPM1 = 0x21;
+ 118   1      IEN0 = IEN0 | 0x41;
+ 119   1      CR = 1;
+ 120   1      SPCON |= 0x40;                /* run spi */	
+ 121   1      EA=1;                         /* enable interrupts */
+ 122   1      
+ 123   1      isInit = 1;
+ 124   1      
+ 125   1      	while(1)			   			/* endless  */
+ 126   1         {
+ 127   2         	if(transmit_completed)
+ 128   2         	{
+ 129   3         	 	transmit_completed = 0;
+ 130   3         	 	switch(cnt)
+ 131   3         	 	{
+ 132   4         	 		case 1:
+ 133   4         	 			//SPDAT = 13;
+ 134   4         	 			break;
+ 135   4         	 		case 2:
+ 136   4         	 			//SPDAT = 0;
+ 137   4         	 			break;
+ 138   4         	 		case 3:
+ 139   4         	 			//SPDAT = 0;
+ 140   4         	 			break;
+ 141   4         	 		case 4:
+ 142   4         	 			//SPDAT = 0;
+ 143   4         	 			break;
+ 144   4         	 		default:
+ 145   4         	 			break;
+ 146   4         	 	}
+ 147   3         	 cnt++;
+ 148   3         	}
+ 149   2         //P11=~P11;                /* P1.1 is available as standard I/O
+            - pin */ 
+ 150   2         //SPDAT=data_example;        /* send an example data */
+ 151   2         //while(!transmit_completed);/* wait end of transmition */
+ 152   2         //transmit_completed = 0;    /* clear software transfert flag *
+            -/
+ 153   2      
+ 154   2         //SPDAT=0x00;                /* data is send to generate SCK si
+            -gnal */
+ 155   2         //while(!transmit_completed);/* wait end of transmition */
+ 156   2         //transmit_completed = 0;    /* clear software transfert flag *
+            -/
+ 157   2         //data_save = serial_data;   /* save receive data */  
+ 158   2         }
+ 159   1      
+ 160   1      }
+ 161          void PCATimers() interrupt 6  using 1
+ 162          {
+ 163   1      	
+ 164   1      	if(CCF1)
+ 165   1      	{
+ 166   2      		///IEN0 = IEN0 & 0xBF;
+ 167   2      		CCF1 = 0;
+ 168   2      		cnt =1;
+ 169   2      		SPDAT = 0xFF;
+ 170   2      		count++;
+ 171   2      		//IEN0 = IEN0 | 0x40;
+ 172   2      	}
+ 173   1      }
+ 174          void KeyInt() interrupt 0 
+ 175          {  
+ 176   1      	if(isInit)
+ 177   1      	{
+ 178   2      		Key1 = P2&0x1F;
+ 179   2      		LcdWriteCmd(0x01);
+ 180   2      		LcdGotoXY(0,0);
+ 181   2      		//LcdWriteChar(Key1+48);
+ 182   2      		switch(Key1)
+ 183   2      		{
+ 184   3      		case 0:
+ 185   3      			count = 0;
+ 186   3      			break;
+ 187   3      		case 1:
+ 188   3      			SPDAT=0xFF;
+ 189   3      			cnt =1;
+ 190   3         		//while(!transmit_completed);
+ 191   3      	   	//transmit_completed = 0;
+ 192   3      	   	
+ 193   3      	   	//SPDAT=13;
+ 194   3         		//while(!transmit_completed);
+ 195   3      	   	//transmit_completed = 0;
+ 196   3      			break;
+ 197   3      		case 2:
+ 198   3      			LcdWriteChar(count+48);
+ 199   3      			break;
+ 200   3      		case 3:
+ 201   3      			SPDAT='I';
+ 202   3      			cnt =1;
+ 203   3      			break;
+ 204   3      		 }
+ 205   2      	 }
+ 206   1      }
+ 207          void it_SPI(void) interrupt 9 /* interrupt address is 0x004B */
+ 208          {
+ 209   1      	switch	( SPSTA )         /* read and clear spi status register */
+            -
+ 210   1      	{
+ 211   2      		case 0x80:
+ 212   2             serial_data=SPDAT;   /* read receive data */
+ 213   2      		 transmit_completed=1;/* set software flag */
+ 214   2      		 LcdWriteChar(serial_data);
+ 215   2      		 LcdWriteChar(' ');
+ 216   2       		break;
+ 217   2      
+ 218   2      		case 0x10:
+ 219   2               /* put here for mode fault tasking */	
+ 220   2      		break;
+ 221   2      	
+ 222   2      		case 0x40:
+ 223   2               /* put here for overrun tasking */	
+ 224   2      		break;
+ 225   2      	}
+ 226   1      }
+ 227          
+ 228          
+ 229          
+ 230          
+ 231          
+ 232          
+ 233          
+ 234          
+ 235          
+ 236          
+ 237          
+ 238          
+ 239          
+ 240          
+ 241          
+ 242          
+ 243          
+ 244          
+ 245          
+ 246          
+ 247          
+ 248          
+ 249          
+ 250          
+ 251          
+ 252          
+ 253          
+ 254          
+ 255          
+ 256          
+ 257          
+ 258          
+ 259          
+ 260          
+ 261          
+ 262          
+ 263          
+ 264          
+ 265          
+ 266          
+ 267          
+ 268          
+ 269          
+ 270          
+ 271          
+ 272          
+C51 COMPILER V6.11.4C,  SPI_MASTER_NO_SS          01/22/110  14:08:05  PAGE  2
+
+ASSEMBLY LISTING OF GENERATED OBJECT CODE
+
+            ; FUNCTION LcdInit (BEGIN)
+                                           ; SOURCE LINE # 50 
+0000 E500    R      MOV    A,CMD_FN_DL
+0002 4500    R      ORL    A,CMD_FN
+0004 4500    R      ORL    A,CMD_FN_N
+0006 FF             MOV    R7,A
+0007 120000  R      LCALL  _LcdWriteCmd
+                                           ; SOURCE LINE # 51 
+000A E500    R      MOV    A,CMD_FN_DL
+000C 4500    R      ORL    A,CMD_FN
+000E 4500    R      ORL    A,CMD_FN_N
+0010 FF             MOV    R7,A
+0011 120000  R      LCALL  _LcdWriteCmd
+                                           ; SOURCE LINE # 52 
+0014 E500    R      MOV    A,CMD_FN_DL
+0016 4500    R      ORL    A,CMD_FN
+0018 4500    R      ORL    A,CMD_FN_N
+001A FF             MOV    R7,A
+001B 120000  R      LCALL  _LcdWriteCmd
+                                           ; SOURCE LINE # 53 
+001E E500    R      MOV    A,CMD_ETR_ID
+0020 4500    R      ORL    A,CMD_ETR
+0022 FF             MOV    R7,A
+0023 120000  R      LCALL  _LcdWriteCmd
+                                           ; SOURCE LINE # 54 
+0026 E500    R      MOV    A,CMD_DSP_D
+0028 4500    R      ORL    A,CMD_DSP
+002A FF             MOV    R7,A
+002B 120000  R      LCALL  _LcdWriteCmd
+002E 22             RET    
+
+            ; FUNCTION LcdInit (END)
+
+            ; FUNCTION LcdBusy (BEGIN)
+                                           ; SOURCE LINE # 58 
+0000 D287           SETB   BS
+                                           ; SOURCE LINE # 59 
+0002 D293           SETB   EN
+                                           ; SOURCE LINE # 60 
+0004 C291           CLR    RS
+                                           ; SOURCE LINE # 61 
+0006 D292           SETB   RW
+0008         ?WHILE1:
+                                           ; SOURCE LINE # 62 
+0008 308706         JNB    BS,?NXT1
+                                           ; SOURCE LINE # 64 
+000B C293           CLR    EN
+                                           ; SOURCE LINE # 65 
+000D D293           SETB   EN
+000F 80F7           SJMP   ?WHILE1
+0011         ?NXT1:
+0011 22             RET    
+
+            ; FUNCTION LcdBusy (END)
+
+            ; FUNCTION _LcdWriteCmd (BEGIN)
+              ; Register R7 is assigned to parameter var
+                                           ; SOURCE LINE # 70 
+0000 8F80           MOV    P0,R7
+                                           ; SOURCE LINE # 71 
+0002 C291           CLR    RS
+                                           ; SOURCE LINE # 72 
+0004 C292           CLR    RW
+                                           ; SOURCE LINE # 73 
+0006 D293           SETB   EN
+                                           ; SOURCE LINE # 74 
+0008 C293           CLR    EN
+                                           ; SOURCE LINE # 75 
+000A 120000  R      LCALL  LcdBusy
+000D 22             RET    
+
+            ; FUNCTION _LcdWriteCmd (END)
+
+            ; FUNCTION _LcdWriteChar (BEGIN)
+              ; Register R7 is assigned to parameter var
+                                           ; SOURCE LINE # 79 
+0000 8F80           MOV    P0,R7
+                                           ; SOURCE LINE # 80 
+0002 D291           SETB   RS
+                                           ; SOURCE LINE # 81 
+0004 C292           CLR    RW
+                                           ; SOURCE LINE # 82 
+0006 D293           SETB   EN
+                                           ; SOURCE LINE # 83 
+0008 C293           CLR    EN
+                                           ; SOURCE LINE # 84 
+000A 120000  R      LCALL  LcdBusy
+000D 22             RET    
+
+            ; FUNCTION _LcdWriteChar (END)
+
+            ; FUNCTION _LcdWriteStr (BEGIN)
+              ; Register R0R4R5 is assigned to parameter var
+                                           ; SOURCE LINE # 89 
+0000 EB             MOV    A,R3
+0001 FD             MOV    R5,A
+0002 EA             MOV    A,R2
+0003 FC             MOV    R4,A
+0004 E9             MOV    A,R1
+0005 F8             MOV    R0,A
+0006         ?WHILE3:
+                                           ; SOURCE LINE # 88 
+0006 ED             MOV    A,R5
+0007 FB             MOV    R3,A
+0008 EC             MOV    A,R4
+0009 FA             MOV    R2,A
+000A E8             MOV    A,R0
+000B F9             MOV    R1,A
+000C 120000  R      LCALL  IPGN1?C
+000F 6015           JZ     ?NXT3
+                                           ; SOURCE LINE # 89 
+0011 ED             MOV    A,R5
+0012 FB             MOV    R3,A
+0013 EC             MOV    A,R4
+0014 FA             MOV    R2,A
+0015 E8             MOV    A,R0
+0016 F9             MOV    R1,A
+0017 08             INC    R0
+0018 E8             MOV    A,R0
+0019 7002           JNZ    ?LAB10
+001B 0C             INC    R4
+001C EC             MOV    A,R4
+001D         ?LAB10:
+001D 120000  R      LCALL  IPGN1?C
+0020 FF             MOV    R7,A
+0021 120000  R      LCALL  _LcdWriteChar
+0024 80E0           SJMP   ?WHILE3
+0026         ?NXT3:
+0026 22             RET    
+
+            ; FUNCTION _LcdWriteStr (END)
+
+            ; FUNCTION _LcdGotoXY (BEGIN)
+              ; Register R7 is assigned to parameter row
+              ; Register R5 is assigned to parameter col
+                                           ; SOURCE LINE # 94 
+0000 EF             MOV    A,R7
+0001 03             RR     A
+0002 03             RR     A
+0003 54C0           ANL    A,#0C0H
+0005 4500    R      ORL    A,CMD_DD_RAM
+0007 4D             ORL    A,R5
+0008 FF             MOV    R7,A
+0009 120000  R      LCALL  _LcdWriteCmd
+000C 22             RET    
+
+            ; FUNCTION _LcdGotoXY (END)
+
+            ; FUNCTION main (BEGIN)
+                                           ; SOURCE LINE # 99 
+0000 120000  R      LCALL  LcdInit
+                                           ; SOURCE LINE # 100 
+0003 7F01           MOV    R7,#001H
+0005 120000  R      LCALL  _LcdWriteCmd
+                                           ; SOURCE LINE # 101 
+0008 7B05           MOV    R3,#005H
+000A 7A00    R      MOV    R2,#000H
+000C 7900    R      MOV    R1,#000H
+000E 120000  R      LCALL  _LcdWriteStr
+                                           ; SOURCE LINE # 102 
+0011 D288           SETB   IT0
+                                           ; SOURCE LINE # 103 
+0013 D2A8           SETB   EX0
+                                           ; SOURCE LINE # 104 
+0015 43C310         ORL    SPCON,#010H
+0018 85C3C3         MOV    SPCON,SPCON
+                                           ; SOURCE LINE # 105 
+001B 43C382         ORL    SPCON,#082H
+001E 85C3C3         MOV    SPCON,SPCON
+                                           ; SOURCE LINE # 106 
+0021 43C320         ORL    SPCON,#020H
+0024 85C3C3         MOV    SPCON,SPCON
+                                           ; SOURCE LINE # 108 
+0027 43C308         ORL    SPCON,#008H
+002A 85C3C3         MOV    SPCON,SPCON
+                                           ; SOURCE LINE # 110 
+002D 53C3FB         ANL    SPCON,#0FBH
+0030 85C3C3         MOV    SPCON,SPCON
+                                           ; SOURCE LINE # 111 
+0033 43B104         ORL    IEN1,#004H
+0036 85B1B1         MOV    IEN1,IEN1
+                                           ; SOURCE LINE # 114 
+0039 75D903         MOV    CMOD,#003H
+                                           ; SOURCE LINE # 115 
+003C 75F900         MOV    CH,#000H
+                                           ; SOURCE LINE # 116 
+003F 75E900         MOV    CL,#000H
+                                           ; SOURCE LINE # 117 
+0042 75DB21         MOV    CCAPM1,#021H
+                                           ; SOURCE LINE # 118 
+0045 E5A8           MOV    A,IEN0
+0047 4441           ORL    A,#041H
+0049 F5A8           MOV    IEN0,A
+                                           ; SOURCE LINE # 119 
+004B D2DE           SETB   CR
+                                           ; SOURCE LINE # 120 
+004D 43C340         ORL    SPCON,#040H
+0050 85C3C3         MOV    SPCON,SPCON
+                                           ; SOURCE LINE # 121 
+0053 D2AF           SETB   EA
+                                           ; SOURCE LINE # 123 
+0055 D200    R      SETB   isInit
+0057         ?WHILE5:
+                                           ; SOURCE LINE # 127 
+0057 3000FD  R      JNB    transmit_completed,?WHILE5
+                                           ; SOURCE LINE # 129 
+005A C200    R      CLR    transmit_completed
+                                           ; SOURCE LINE # 130 
+005C E500    R      MOV    A,cnt
+005E 14             DEC    A
+005F 6009           JZ     ?NXT9
+0061 14             DEC    A
+0062 6006           JZ     ?NXT9
+0064 14             DEC    A
+0065 6003           JZ     ?NXT9
+0067 14             DEC    A
+0068 6000           JZ     ?NXT9
+006A         ?NXT9:
+                                           ; SOURCE LINE # 147 
+006A 0500    R      INC    cnt
+006C 80E9           SJMP   ?WHILE5
+
+            ; FUNCTION main (END)
+
+            ; FUNCTION PCATimers (BEGIN)
+                                           ; SOURCE LINE # 170 
+0000 C0E0           PUSH   ACC
+0002 C0D0           PUSH   PSW
+0004 75D008         MOV    PSW,#008H
+                                           ; SOURCE LINE # 164 
+0007 30D90A         JNB    CCF1,?NXT13
+                                           ; SOURCE LINE # 167 
+000A C2D9           CLR    CCF1
+                                           ; SOURCE LINE # 168 
+000C 750001  R      MOV    cnt,#001H
+                                           ; SOURCE LINE # 169 
+000F 75C5FF         MOV    SPDAT,#0FFH
+                                           ; SOURCE LINE # 170 
+0012 0500    R      INC    count
+0014         ?NXT13:
+0014 D0D0           POP    PSW
+0016 D0E0           POP    ACC
+0018 32             RETI   
+
+            ; FUNCTION PCATimers (END)
+
+            ; FUNCTION KeyInt (BEGIN)
+                                           ; SOURCE LINE # 203 
+0000 C0E0           PUSH   ACC
+0002 C0D0           PUSH   PSW
+0004 C005           PUSH   AR5
+0006 EF             MOV    A,R7
+0007 C007           PUSH   AR7
+                                           ; SOURCE LINE # 176 
+0009 30003D  R      JNB    isInit,?NXT19
+                                           ; SOURCE LINE # 178 
+000C E5A0           MOV    A,P2
+000E 541F           ANL    A,#01FH
+0010 F500    R      MOV    Key1,A
+                                           ; SOURCE LINE # 179 
+0012 7F01           MOV    R7,#001H
+0014 120000  R      LCALL  _LcdWriteCmd
+                                           ; SOURCE LINE # 180 
+0017 E4             CLR    A
+0018 FF             MOV    R7,A
+0019 FD             MOV    R5,A
+001A 120000  R      LCALL  _LcdGotoXY
+                                           ; SOURCE LINE # 182 
+001D E500    R      MOV    A,Key1
+001F 600B           JZ     ?CASE12
+0021 14             DEC    A
+0022 600D           JZ     ?CASE13
+0024 14             DEC    A
+0025 6012           JZ     ?CASE14
+0027 14             DEC    A
+0028 6019           JZ     ?CASE15
+002A 801D           SJMP   ?NXT19
+002C         ?CASE12:
+                                           ; SOURCE LINE # 185 
+002C E4             CLR    A
+002D F500    R      MOV    count,A
+                                           ; SOURCE LINE # 186 
+002F 8018           SJMP   ?NXT19
+0031         ?CASE13:
+                                           ; SOURCE LINE # 188 
+0031 75C5FF         MOV    SPDAT,#0FFH
+                                           ; SOURCE LINE # 189 
+0034 750001  R      MOV    cnt,#001H
+                                           ; SOURCE LINE # 196 
+0037 8010           SJMP   ?NXT19
+0039         ?CASE14:
+                                           ; SOURCE LINE # 198 
+0039 E500    R      MOV    A,count
+003B 2430           ADD    A,#030H
+003D FF             MOV    R7,A
+003E 120000  R      LCALL  _LcdWriteChar
+                                           ; SOURCE LINE # 199 
+0041 8006           SJMP   ?NXT19
+0043         ?CASE15:
+                                           ; SOURCE LINE # 201 
+0043 75C549         MOV    SPDAT,#049H
+                                           ; SOURCE LINE # 202 
+0046 750001  R      MOV    cnt,#001H
+0049         ?NXT19:
+                                           ; SOURCE LINE # 203 
+0049 D007           POP    AR7
+004B D005           POP    AR5
+004D D0D0           POP    PSW
+004F D0E0           POP    ACC
+0051 32             RETI   
+
+            ; FUNCTION KeyInt (END)
+
+            ; FUNCTION it_SPI (BEGIN)
+                                           ; SOURCE LINE # 224 
+0000 C0E0           PUSH   ACC
+0002 C0D0           PUSH   PSW
+0004 EF             MOV    A,R7
+0005 C007           PUSH   AR7
+                                           ; SOURCE LINE # 209 
+0007 E5C4           MOV    A,SPSTA
+0009 24F0           ADD    A,#0F0H
+000B 6019           JZ     ?NXT22
+000D 24D0           ADD    A,#0D0H
+000F 6015           JZ     ?NXT22
+0011 24C0           ADD    A,#0C0H
+0013 6002           JZ     ?CASE21
+0015 800F           SJMP   ?NXT23
+0017         ?CASE21:
+                                           ; SOURCE LINE # 212 
+0017 85C500  R      MOV    serial_data,SPDAT
+                                           ; SOURCE LINE # 213 
+001A D200    R      SETB   transmit_completed
+                                           ; SOURCE LINE # 214 
+001C AF00    R      MOV    R7,serial_data
+001E 120000  R      LCALL  _LcdWriteChar
+                                           ; SOURCE LINE # 215 
+0021 7F20           MOV    R7,#020H
+0023 120000  R      LCALL  _LcdWriteChar
+0026         ?NXT22:
+
+0026         ?NXT23:
+                                           ; SOURCE LINE # 224 
+0026 D007           POP    AR7
+0028 D0D0           POP    PSW
+002A D0E0           POP    ACC
+002C 32             RETI   
+
+            ; FUNCTION it_SPI (END)
+
+C51 COMPILER V6.11.4C,  SPI_MASTER_NO_SS          01/22/110  14:08:05  PAGE  3
+
+NAME                                    CLASS   MSPACE  TYPE    OFFSET  SIZE
+====                                    =====   ======  ====    ======  ====
+
+serial_data. . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0000H   1    
+cnt. . . . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0001H   1    
+data_example . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0002H   1    
+data_save. . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0003H   1    
+transmit_completed . . . . . . . . . .  PUBLIC  DATA    BIT     0000H   1    
+isInit . . . . . . . . . . . . . . . .  PUBLIC  DATA    BIT     0001H   1    
+Key1 . . . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0004H   1    
+count. . . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0005H   1    
+CMD_CLR. . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0006H   1    
+CMD_HOM. . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0007H   1    
+CMD_ETR. . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0008H   1    
+CMD_ETR_S. . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0009H   1    
+CMD_ETR_ID . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    000AH   1    
+CMD_DSP. . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    000BH   1    
+CMD_DSP_B. . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    000CH   1    
+CMD_DSP_C. . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    000DH   1    
+CMD_DSP_D. . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    000EH   1    
+CMD_SHT. . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    000FH   1    
+CMD_SHT_RL . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0010H   1    
+CMD_SHT_SC . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0011H   1    
+CMD_FN . . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0012H   1    
+CMD_FN_F . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0013H   1    
+CMD_FN_N . . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0014H   1    
+CMD_FN_DL. . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0015H   1    
+CMD_CG_RAM . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0016H   1    
+CMD_DD_RAM . . . . . . . . . . . . . .  PUBLIC  DATA    BASE    0017H   1    
+LcdInit. . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+LcdBusy. . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+LcdWriteCmd. . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+  var?046. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+  var?046. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+LcdWriteChar . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+  var?047. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+  var?047. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+LcdWriteStr. . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+  var?048. . . . . . . . . . . . . . .  PARAM   DATA    PTR     0000H   3    
+  var?048. . . . . . . . . . . . . . .  PARAM   DATA    PTR     0000H   3    
+LcdGotoXY. . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+  row?049. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+  col?050. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0001H   1    
+  row?049. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0000H   1    
+  col?050. . . . . . . . . . . . . . .  PARAM   DATA    BASE    0001H   1    
+main . . . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+PCATimers. . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+KeyInt . . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+it_SPI . . . . . . . . . . . . . . . .  PUBLIC  CODE    PROC    -----   -----
+C51 COMPILER V6.11.4C,  SPI_MASTER_NO_SS          01/22/110  14:08:05  PAGE  4
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    407    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     24    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      2    ----
+END OF MODULE INFORMATION.
+
+C51 COMPILATION COMPLETE.  1 WARNING,  0 ERROR

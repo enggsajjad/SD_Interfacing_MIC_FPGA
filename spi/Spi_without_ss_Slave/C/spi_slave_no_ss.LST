@@ -1,0 +1,109 @@
+C51 COMPILER V7.00  SPI_SLAVE_NO_SS                                                        11/19/2008 15:34:10 PAGE 1   
+
+
+C51 COMPILER V7.00, COMPILATION OF MODULE SPI_SLAVE_NO_SS
+OBJECT MODULE PLACED IN spi_slave_no_ss.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE spi_slave_no_ss.c BROWSE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          /**
+   2           * @file $RCSfile: spi_slave_no_ss.c,v $
+   3           *
+   4           * Copyright (c) 2004 Atmel.
+   5           *
+   6           * Please read file license.txt for copyright notice.
+   7           *
+   8           * @brief This file is an example to use spi in slave mode.
+   9           *
+  10           * This file can be parsed by Doxygen for automatic documentation
+  11           * generation.
+  12           * Put here the functional description of this file within the software
+  13           * architecture of your program.
+  14           *
+  15           * @version $Revision: 1.0 $ $Name:  $
+  16           */
+  17          
+  18          /* @section  I N C L U D E S */
+  19          #include "reg_c51.h"
+  20          
+  21          bit transmit_completed;
+  22          char serial_data;
+  23          sbit P11 = P1^1;
+  24          /**
+  25           * FUNCTION_PURPOSE: This file set up spi in slave mode with 
+  26           * Fclk Periph/128 as baud rate and without slave select pin.
+  27           * FUNCTION_INPUTS: P1.5(MISO) serial input  
+  28           * FUNCTION_OUTPUTS: P1.7(MOSI) serial output
+  29           *                   P1.1
+  30           */
+  31          void main(void)
+  32          {
+  33   1      SPCON |= 0x20;                /* P1.1 is available as standard I/O pin */
+  34   1      /* SPCON.5(SSDIS) has no effect if CPHA=0 in slave mode then P1.1 is used to slave select */ 
+  35   1      SPCON &= ~0x10;               /* slave mode */
+  36   1      SPCON &= ~0x08;               /* CPOL=0; transmit mode example*/
+  37   1      SPCON |= 0x04;                /* CPHA=1; transmit mode example*/
+  38   1      IEN1 |= 0x04;                 /* enable spi interrupt */
+  39   1      SPCON |= 0x40;                /* spi run */
+  40   1      transmit_completed = 0;       /* clear software transfert flag */
+  41   1      EA=1;                         /* enable interrupts */
+  42   1      
+  43   1      while(1)                                                   /* endless  */
+  44   1      {
+  45   2      P11=~P11;                   /* P1.1 is available as standard I/O pin */
+  46   2      if(transmit_completed)
+  47   2         {
+  48   3         SPDAT = serial_data;       /* echo data to master */
+  49   3         P2 = SPDAT;
+  50   3         transmit_completed = 0;    /* clear software transfert flag */
+  51   3         }
+  52   2      }
+  53   1      
+  54   1      
+  55   1      }
+C51 COMPILER V7.00  SPI_SLAVE_NO_SS                                                        11/19/2008 15:34:10 PAGE 2   
+
+  56          
+  57          
+  58          /**
+  59           * FUNCTION_PURPOSE: spi interrupt, receive data to master
+  60           * FUNCTION_INPUTS: void
+  61           * FUNCTION_OUTPUTS: void
+  62           */
+  63          void it_SPI(void) interrupt 9 /* interrupt address is 0x004B */
+  64          {
+  65   1              switch  ( SPSTA )         /* read and clear spi status register */
+  66   1              {
+  67   2                      case 0x80:
+  68   2               serial_data=SPDAT;   /* read receive data */
+  69   2               transmit_completed=1;/* set software flag */
+  70   2                      break;
+  71   2      
+  72   2                      case 0x10:
+  73   2               /* put here for mode fault tasking */  
+  74   2                      break;
+  75   2              
+  76   2                      case 0x40:
+  77   2               /* put here for overrun tasking */     
+  78   2                      break;
+  79   2              }
+  80   1         SPDAT=serial_data;         /* needed to complete clearing sequence */
+  81   1      }
+  82          
+  83          
+  84          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     68    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      1    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

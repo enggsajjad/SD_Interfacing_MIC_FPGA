@@ -1,0 +1,21 @@
+# Xilinx CORE Generator 6.1i
+# User = Sajjad
+Initializing default project...
+Loading plug-ins...
+All runtime messages will be recorded in F:\P\SD\uAlfat\coregen.log
+# busformat=BusFormatAngleBracketNotRipped
+# designflow=VHDL
+# expandedprojectpath=F:\P\SD\uAlfat
+# flowvendor=Foundation_iSE
+# formalverification=None
+# simulationoutputproducts=VHDL
+# xilinxfamily=Virtex2
+# outputoption=DesignFlow
+# overwritefiles=Default
+# simvendor=ModelSim
+# expandedprojectpath=F:\P\SD\uAlfat
+SETPROJECT .
+Set current Project to F:\P\SD\uAlfat
+SET BusFormat = BusFormatAngleBracketNotRipped
+SETXIPCPORTHOST 1042
+XIPCPJSENDCORES spartan2

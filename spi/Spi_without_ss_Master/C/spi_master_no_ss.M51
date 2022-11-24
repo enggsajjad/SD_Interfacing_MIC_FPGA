@@ -1,0 +1,387 @@
+BL51 BANKED LINKER/LOCATER V5.00                                                        11/20/2008  11:35:54  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V5.00, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE spi_master_no_ss.obj TO spi_master_no_ss RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  spi_master_no_ss.obj (SPI_MASTER_NO_SS)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?CLDPTR)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  spi_master_no_ss (SPI_MASTER_NO_SS)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0016H     UNIT         ?DT?SPI_MASTER_NO_SS
+                    001EH     0002H                  *** GAP ***
+            BIT     0020H.0   0000H.2   UNIT         ?BI?SPI_MASTER_NO_SS
+                    0020H.2   0000H.6                *** GAP ***
+            DATA    0021H     0003H     UNIT         _DATA_GROUP_
+            IDATA   0024H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0003H     ABSOLUTE     
+            CODE    0006H     003CH     UNIT         ?C_INITSEG
+                    0042H     0009H                  *** GAP ***
+            CODE    004BH     0003H     ABSOLUTE     
+            CODE    004EH     008CH     UNIT         ?C_C51STARTUP
+            CODE    00DAH     0037H     UNIT         ?PR?MAIN?SPI_MASTER_NO_SS
+            CODE    0111H     0025H     UNIT         ?PR?_LCDWRITESTR?SPI_MASTER_NO_SS
+            CODE    0136H     001CH     UNIT         ?PR?IT_SPI?SPI_MASTER_NO_SS
+            CODE    0152H     0019H     UNIT         ?PR?LCDINIT?SPI_MASTER_NO_SS
+            CODE    016BH     0019H     UNIT         ?C?LIB_CODE
+            CODE    0184H     0014H     UNIT         ?PR?_LCDWRITECMD?SPI_MASTER_NO_SS
+            CODE    0198H     0012H     UNIT         ?PR?LCDBUSY?SPI_MASTER_NO_SS
+            CODE    01AAH     000EH     UNIT         ?PR?KEYINT?SPI_MASTER_NO_SS
+            CODE    01B8H     000DH     UNIT         ?PR?_LCDWRITECHAR?SPI_MASTER_NO_SS
+            CODE    01C5H     000DH     UNIT         ?PR?_LCDGOTOXY?SPI_MASTER_NO_SS
+            CODE    01D2H     000DH     UNIT         ?CO?SPI_MASTER_NO_SS
+
+
+
+OVERLAY MAP OF MODULE:   spi_master_no_ss (SPI_MASTER_NO_SS)
+
+
+SEGMENT                                      DATA_GROUP 
+  +--> CALLED SEGMENT                      START    LENGTH
+----------------------------------------------------------
+?C_C51STARTUP                              -----    -----
+  +--> ?PR?MAIN?SPI_MASTER_NO_SS
+BL51 BANKED LINKER/LOCATER V5.00                                                      11/20/2008  11:35:54  PAGE 2
+
+
+  +--> ?C_INITSEG
+
+?PR?MAIN?SPI_MASTER_NO_SS                  -----    -----
+  +--> ?PR?LCDINIT?SPI_MASTER_NO_SS
+  +--> ?PR?_LCDWRITECMD?SPI_MASTER_NO_SS
+  +--> ?CO?SPI_MASTER_NO_SS
+  +--> ?PR?_LCDWRITESTR?SPI_MASTER_NO_SS
+
+?PR?LCDINIT?SPI_MASTER_NO_SS               -----    -----
+  +--> ?PR?_LCDWRITECMD?SPI_MASTER_NO_SS
+
+?PR?_LCDWRITECMD?SPI_MASTER_NO_SS          -----    -----
+  +--> ?PR?LCDBUSY?SPI_MASTER_NO_SS
+
+?PR?_LCDWRITESTR?SPI_MASTER_NO_SS          0021H    0003H
+  +--> ?PR?_LCDWRITECHAR?SPI_MASTER_NO_SS
+
+?PR?_LCDWRITECHAR?SPI_MASTER_NO_SS         -----    -----
+  +--> ?PR?LCDBUSY?SPI_MASTER_NO_SS
+
+
+
+SYMBOL TABLE OF MODULE:  spi_master_no_ss (SPI_MASTER_NO_SS)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        SPI_MASTER_NO_SS
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0008H         PUBLIC        CMD_DD_RAM
+  B:00D8H.2       PUBLIC        CCF2
+  B:00D8H.3       PUBLIC        CCF3
+  D:0080H         PUBLIC        P0
+  D:0009H         PUBLIC        CMD_CG_RAM
+  D:000AH         PUBLIC        serial_data
+  B:00D8H.4       PUBLIC        CCF4
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  C:01B8H         PUBLIC        _LcdWriteChar
+  B:00D0H.6       PUBLIC        AC
+  B:00B0H.4       PUBLIC        T0
+  D:00C3H         PUBLIC        SPCON
+  B:00B0H.5       PUBLIC        T1
+  B:00A8H.7       PUBLIC        EA
+  B:00A8H.6       PUBLIC        EC
+  B:00D8H.7       PUBLIC        CF
+  B:0098H.7       PUBLIC        FE
+  D:00C4H         PUBLIC        SPSTA
+  D:00A8H         PUBLIC        IEN0
+  D:00B1H         PUBLIC        IEN1
+  D:000BH         PUBLIC        CMD_ETR_ID
+  B:0080H.0       PUBLIC        P0_0
+  B:0090H.0       PUBLIC        P1_0
+  B:0080H.1       PUBLIC        P0_1
+  B:00A0H.0       PUBLIC        P2_0
+  B:0090H.1       PUBLIC        P1_1
+  B:0080H.2       PUBLIC        P0_2
+BL51 BANKED LINKER/LOCATER V5.00                                                      11/20/2008  11:35:54  PAGE 3
+
+
+  B:0090H.3       PUBLIC        EN
+  B:00B0H.0       PUBLIC        P3_0
+  B:00A0H.1       PUBLIC        P2_1
+  B:0090H.2       PUBLIC        P1_2
+  B:0080H.3       PUBLIC        P0_3
+  B:00C0H.0       PUBLIC        P4_0
+  B:00B0H.1       PUBLIC        P3_1
+  B:00A0H.2       PUBLIC        P2_2
+  B:0090H.3       PUBLIC        P1_3
+  B:0080H.4       PUBLIC        P0_4
+  B:0080H.7       PUBLIC        BS
+  B:00D8H.6       PUBLIC        CR
+  B:00E8H.0       PUBLIC        P5_0
+  B:00C0H.1       PUBLIC        P4_1
+  B:00B0H.2       PUBLIC        P3_2
+  B:00A0H.3       PUBLIC        P2_3
+  B:0090H.4       PUBLIC        P1_4
+  B:0080H.5       PUBLIC        P0_5
+  B:00C8H.6       PUBLIC        EXF2
+  B:00E8H.1       PUBLIC        P5_1
+  B:00C0H.2       PUBLIC        P4_2
+  B:00B0H.7       PUBLIC        RD
+  B:00B0H.3       PUBLIC        P3_3
+  B:00A0H.4       PUBLIC        P2_4
+  B:0090H.5       PUBLIC        P1_5
+  B:0080H.6       PUBLIC        P0_6
+  D:000CH         PUBLIC        CMD_CLR
+  B:00E8H.2       PUBLIC        P5_2
+  B:00C0H.3       PUBLIC        P4_3
+  B:00B0H.4       PUBLIC        P3_4
+  B:00A0H.5       PUBLIC        P2_5
+  B:0090H.6       PUBLIC        P1_6
+  B:0080H.7       PUBLIC        P0_7
+  B:00A8H.4       PUBLIC        ES
+  B:00E8H.3       PUBLIC        P5_3
+  B:00C0H.4       PUBLIC        P4_4
+  B:00B0H.5       PUBLIC        P3_5
+  B:00A0H.6       PUBLIC        P2_6
+  B:0090H.7       PUBLIC        P1_7
+  C:018BH         PUBLIC        _LcdWriteCmd
+  B:00D0H.1       PUBLIC        UD
+  B:00E8H.4       PUBLIC        P5_4
+  B:00C0H.5       PUBLIC        P4_5
+  B:00B0H.6       PUBLIC        P3_6
+  B:00A0H.7       PUBLIC        P2_7
+  D:000DH         PUBLIC        CMD_HOM
+  B:00E8H.5       PUBLIC        P5_5
+  B:00C0H.6       PUBLIC        P4_6
+  B:00B0H.7       PUBLIC        P3_7
+  B:0098H.0       PUBLIC        RI
+  B:00E8H.6       PUBLIC        P5_6
+  B:00C0H.7       PUBLIC        P4_7
+  D:000EH         PUBLIC        CMD_SHT_SC
+  B:0020H.0       PUBLIC        transmit_completed
+  B:00D0H.7       PUBLIC        CY
+  B:00E8H.7       PUBLIC        P5_7
+  B:00B0H.2       PUBLIC        INT0
+BL51 BANKED LINKER/LOCATER V5.00                                                      11/20/2008  11:35:54  PAGE 4
+
+
+  D:000FH         PUBLIC        CMD_DSP
+  B:0098H.1       PUBLIC        TI
+  B:00B0H.3       PUBLIC        INT1
+  D:0010H         PUBLIC        CMD_ETR
+  D:0011H         PUBLIC        CMD_SHT_RL
+  D:0012H         PUBLIC        CMD_SHT
+  B:0090H.1       PUBLIC        RS
+  B:00D0H.2       PUBLIC        OV
+  C:00DAH         PUBLIC        main
+  B:0090H.2       PUBLIC        RW
+  B:00C8H.1       PUBLIC        C_T2
+  B:00B0H.6       PUBLIC        WR
+  C:0136H         PUBLIC        it_SPI
+  C:0152H         PUBLIC        LcdInit
+  B:00C8H.5       PUBLIC        RCLK
+  D:0013H         PUBLIC        data_save
+  B:00C8H.4       PUBLIC        TCLK
+  C:0198H         PUBLIC        LcdBusy
+  D:0014H         PUBLIC        CMD_FN_DL
+  C:0111H         PUBLIC        _LcdWriteStr
+  B:0088H.1       PUBLIC        IE0
+  D:0015H         PUBLIC        CMD_DSP_B
+  B:0088H.3       PUBLIC        IE1
+  D:0016H         PUBLIC        CMD_DSP_C
+  D:0017H         PUBLIC        CMD_DSP_D
+  C:01C5H         PUBLIC        _LcdGotoXY
+  B:00C8H.0       PUBLIC        CP_RL2
+  D:0018H         PUBLIC        CMD_FN
+  B:00A8H.1       PUBLIC        ET0
+  B:00A8H.3       PUBLIC        ET1
+  B:0088H.5       PUBLIC        TF0
+  B:00A8H.5       PUBLIC        ET2
+  B:0088H.7       PUBLIC        TF1
+  B:0098H.2       PUBLIC        RB8
+  B:00C8H.7       PUBLIC        TF2
+  B:00A8H.0       PUBLIC        EX0
+  B:0088H.0       PUBLIC        IT0
+  B:00A8H.2       PUBLIC        EX1
+  B:0098H.3       PUBLIC        TB8
+  B:0088H.2       PUBLIC        IT1
+  B:00D0H.0       PUBLIC        P
+  B:0098H.7       PUBLIC        SM0
+  B:0098H.6       PUBLIC        SM1
+  B:0098H.5       PUBLIC        SM2
+  D:0019H         PUBLIC        CMD_ETR_S
+  B:00D0H.3       PUBLIC        RS0
+  B:0088H.4       PUBLIC        TR0
+  B:00D0H.4       PUBLIC        RS1
+  C:01AAH         PUBLIC        KeyInt
+  B:0088H.6       PUBLIC        TR1
+  B:00C8H.2       PUBLIC        TR2
+  D:001AH         PUBLIC        Key1
+  B:00F8H.0       PUBLIC        PI2_0
+  B:00F8H.1       PUBLIC        PI2_1
+  B:00C8H.3       PUBLIC        EXEN2
+  B:0098H.4       PUBLIC        REN
+  D:001BH         PUBLIC        data_example
+BL51 BANKED LINKER/LOCATER V5.00                                                      11/20/2008  11:35:54  PAGE 5
+
+
+  B:00B0H.0       PUBLIC        RXD
+  D:001CH         PUBLIC        CMD_FN_F
+  B:00B0H.1       PUBLIC        TXD
+  B:0020H.1       PUBLIC        isInit
+  B:00D0H.5       PUBLIC        F0
+  D:001DH         PUBLIC        CMD_FN_N
+  B:00D8H.0       PUBLIC        CCF0
+  D:00C5H         PUBLIC        SPDAT
+  B:00D8H.1       PUBLIC        CCF1
+  -------         PROC          LCDINIT
+  C:0152H         LINE#         65
+  C:0152H         LINE#         66
+  C:0152H         LINE#         67
+  C:0155H         LINE#         68
+  C:0158H         LINE#         69
+  C:015BH         LINE#         70
+  C:0163H         LINE#         71
+  -------         ENDPROC       LCDINIT
+  -------         PROC          LCDBUSY
+  C:0198H         LINE#         73
+  C:0198H         LINE#         74
+  C:0198H         LINE#         75
+  C:019AH         LINE#         76
+  C:019CH         LINE#         77
+  C:019EH         LINE#         78
+  C:01A0H         LINE#         79
+  C:01A3H         LINE#         80
+  C:01A3H         LINE#         81
+  C:01A5H         LINE#         82
+  C:01A7H         LINE#         83
+  C:01A9H         LINE#         84
+  -------         ENDPROC       LCDBUSY
+  C:0184H         SYMBOL        L?0028
+  -------         PROC          L?0027
+  -------         ENDPROC       L?0027
+  C:0184H         SYMBOL        L?0028
+  -------         PROC          _LCDWRITECMD
+  D:0007H         SYMBOL        var
+  C:018BH         LINE#         85
+  C:018BH         LINE#         86
+  C:018BH         LINE#         87
+  C:018DH         LINE#         88
+  C:018FH         LINE#         89
+  C:0191H         LINE#         90
+  C:0193H         LINE#         91
+  C:0195H         LINE#         92
+  -------         ENDPROC       _LCDWRITECMD
+  -------         PROC          _LCDWRITECHAR
+  D:0007H         SYMBOL        var
+  C:01B8H         LINE#         94
+  C:01B8H         LINE#         95
+  C:01B8H         LINE#         96
+  C:01BAH         LINE#         97
+  C:01BCH         LINE#         98
+  C:01BEH         LINE#         99
+  C:01C0H         LINE#         100
+  C:01C2H         LINE#         101
+BL51 BANKED LINKER/LOCATER V5.00                                                      11/20/2008  11:35:54  PAGE 6
+
+
+  -------         ENDPROC       _LCDWRITECHAR
+  -------         PROC          _LCDWRITESTR
+  D:0021H         SYMBOL        var
+  C:0111H         LINE#         103
+  C:0117H         LINE#         104
+  C:0117H         LINE#         105
+  C:0122H         LINE#         106
+  C:0135H         LINE#         107
+  -------         ENDPROC       _LCDWRITESTR
+  -------         PROC          _LCDGOTOXY
+  D:0007H         SYMBOL        row
+  D:0005H         SYMBOL        col
+  C:01C5H         LINE#         109
+  C:01C5H         LINE#         110
+  C:01C5H         LINE#         111
+  -------         ENDPROC       _LCDGOTOXY
+  -------         PROC          MAIN
+  C:00DAH         LINE#         120
+  C:00DAH         LINE#         121
+  C:00DAH         LINE#         122
+  C:00DDH         LINE#         123
+  C:00E2H         LINE#         124
+  C:00EBH         LINE#         125
+  C:00EEH         LINE#         126
+  C:00F1H         LINE#         127
+  C:00F4H         LINE#         128
+  C:00F7H         LINE#         129
+  C:00FAH         LINE#         130
+  C:00FDH         LINE#         131
+  C:0100H         LINE#         132
+  C:0102H         LINE#         133
+  C:0105H         LINE#         134
+  C:0107H         LINE#         136
+  C:0107H         LINE#         137
+  C:0107H         LINE#         139
+  C:010AH         LINE#         140
+  C:010DH         LINE#         141
+  C:010FH         LINE#         147
+  -------         ENDPROC       MAIN
+  -------         PROC          KEYINT
+  C:01AAH         LINE#         150
+  C:01ACH         LINE#         152
+  C:01AFH         LINE#         153
+  C:01AFH         LINE#         154
+  C:01B5H         LINE#         158
+  C:01B5H         LINE#         159
+  C:01B5H         LINE#         160
+  C:01B5H         LINE#         161
+  C:01B5H         LINE#         162
+  C:01B5H         LINE#         163
+  C:01B5H         LINE#         164
+  C:01B5H         LINE#         165
+  C:01B5H         LINE#         166
+  -------         ENDPROC       KEYINT
+  -------         PROC          IT_SPI
+  C:0136H         LINE#         167
+  C:013FH         LINE#         169
+BL51 BANKED LINKER/LOCATER V5.00                                                      11/20/2008  11:35:54  PAGE 7
+
+
+  C:0146H         LINE#         170
+  C:0146H         LINE#         171
+  C:0146H         LINE#         172
+  C:0149H         LINE#         173
+  C:014BH         LINE#         174
+  C:014BH         LINE#         176
+  C:014BH         LINE#         178
+  C:014BH         LINE#         180
+  C:014BH         LINE#         182
+  C:014BH         LINE#         183
+  C:014BH         LINE#         184
+  -------         ENDPROC       IT_SPI
+  -------         ENDMOD        SPI_MASTER_NO_SS
+
+  -------         MODULE        ?C?CLDPTR
+  C:016BH         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_LCDGOTOXY?SPI_MASTER_NO_SS
+
+Program Size: data=34.2 xdata=0 code=470
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

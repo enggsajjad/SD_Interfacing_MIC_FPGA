@@ -1,0 +1,215 @@
+C51 COMPILER V7.00  SPI_MASTER_NO_SS                                                       11/20/2008 11:35:54 PAGE 1   
+
+
+C51 COMPILER V7.00, COMPILATION OF MODULE SPI_MASTER_NO_SS
+OBJECT MODULE PLACED IN spi_master_no_ss.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE spi_master_no_ss.c BROWSE DEBUG OBJECTEXTEND
+
+stmt level    source
+
+   1          /**
+   2           * @file $RCSfile: spi_master_no_ss.c,v $
+   3           *
+   4           * Copyright (c) 2004 Atmel.
+   5           *
+   6           * Please read file license.txt for copyright notice.
+   7           *
+   8           * @brief This file is an example to use spi in master mode.
+   9           *
+  10           * This file can be parsed by Doxygen for automatic documentation
+  11           * generation.
+  12           * Put here the functional description of this file within the software
+  13           * architecture of your program.
+  14           *
+  15           * @version $Revision: 1.0 $ $Name:  $
+  16           */
+  17          
+  18          /* @section  I N C L U D E S */
+  19          #include "reg_c51.h"
+  20          char serial_data;
+  21          char data_example=0x55;
+  22          char data_save;
+  23          bit transmit_completed= 0,isInit;
+  24          unsigned char Key1;
+  25          //sbit P11 = P1^1;
+  26          //LCD Interfacing Pins
+  27          sbit RS = P1^1; 
+  28          sbit RW = P1^2;
+  29          sbit EN = P1^3;
+  30          sbit BS = P0^7;
+  31          //Clear Display Command
+  32          const unsigned char CMD_CLR = 0x01;
+  33          //Return Home Command
+  34          const unsigned char CMD_HOM = 0x02;
+  35          //Entry Mode Set Commands
+  36          const unsigned char CMD_ETR = 0x04;
+  37          const unsigned char CMD_ETR_S = 0x01;
+  38          const unsigned char CMD_ETR_ID = 0x02;
+  39          //Display On  Off Control Commands
+  40          const unsigned char CMD_DSP = 0x08;
+  41          const unsigned char CMD_DSP_B = 0x01;
+  42          const unsigned char CMD_DSP_C = 0x02;
+  43          const unsigned char CMD_DSP_D = 0x04;
+  44          //Cursor & Display Shift Commands
+  45          const unsigned char CMD_SHT = 0x10;
+  46          const unsigned char CMD_SHT_RL = 0x04;
+  47          const unsigned char CMD_SHT_SC = 0x08;
+  48          //Function Set Commands
+  49          const unsigned char CMD_FN = 0x20;
+  50          const unsigned char CMD_FN_F = 0x04;
+  51          const unsigned char CMD_FN_N = 0x08;
+  52          const unsigned char CMD_FN_DL = 0x10;
+  53          //Set CG RAM Address Command
+  54          const unsigned char CMD_CG_RAM = 0x40;
+  55          //Set DD RAM Address Command
+C51 COMPILER V7.00  SPI_MASTER_NO_SS                                                       11/20/2008 11:35:54 PAGE 2   
+
+  56          const unsigned char CMD_DD_RAM = 0x80;
+  57          //Function Prototypes
+  58          void LcdInit();
+  59          void LcdBusy(void);
+  60          void LcdWriteCmd(unsigned char c);
+  61          void LcdWriteChar(unsigned char var);
+  62          void LcdWriteStr(unsigned char *var);
+  63          void LcdGotoXY(unsigned char r,unsigned char c);
+  64          //Function Definitions
+  65          void LcdInit()
+  66          {
+  67   1         LcdWriteCmd(CMD_FN|CMD_FN_DL|CMD_FN_N);      //Function Set 0x38
+  68   1         LcdWriteCmd(CMD_FN|CMD_FN_DL|CMD_FN_N);      //Function Set
+  69   1         LcdWriteCmd(CMD_FN|CMD_FN_DL|CMD_FN_N);      //Function Set
+  70   1              LcdWriteCmd(CMD_ETR|CMD_ETR_ID);                                //Entry Mode Set 0x06
+  71   1         LcdWriteCmd(CMD_DSP|CMD_DSP_D);                              //Display On  Off Control 0x0C
+  72   1      }
+  73          void LcdBusy()
+  74          {
+  75   1              BS   = 1;                       //Make D7th bit of LCD as i/p
+  76   1         EN   = 1;         //Make port pin as o/p
+  77   1         RS   = 0;         //Selected command register
+  78   1         RW   = 1;         //We are reading
+  79   1         while(BS)
+  80   1         {                                    //read busy flag again and again till it becomes 0 Enable H->L
+  81   2              EN   = 0;
+  82   2            EN   = 1;
+  83   2         }
+  84   1      }
+  85          void LcdWriteCmd(unsigned char var)
+  86          {
+  87   1              P0 = var;       //Commands to be Written
+  88   1         RS   = 0;            //Selected command register
+  89   1         RW   = 0;            //We are writing in instruction register
+  90   1         EN   = 1;            //Enable H->L
+  91   1         EN   = 0;
+  92   1         LcdBusy();      //Wait for LCD to process the command
+  93   1      }
+  94          void LcdWriteChar(unsigned char var)
+  95          {
+  96   1              P0 = var;       //Data/Character to be Written
+  97   1         RS   = 1;         //Selected data register
+  98   1         RW   = 0;         //We are writing
+  99   1         EN   = 1;         //Enable H->L
+ 100   1         EN   = 0;
+ 101   1         LcdBusy();      //Wait for LCD to process the command
+ 102   1      }
+ 103          void LcdWriteStr(unsigned char *var)
+ 104          {
+ 105   1              while(*var)       //till string ends send characters one by one
+ 106   1              LcdWriteChar(*var++);
+ 107   1      }
+ 108          
+ 109          void LcdGotoXY(unsigned char row, unsigned char col)
+ 110          {
+ 111   1              LcdWriteCmd(CMD_DD_RAM | (row << 6) | col);
+ 112   1      }
+ 113          /**
+ 114           * FUNCTION_PURPOSE: This file set up spi in master mode with 
+ 115           * Fclk Periph/128 as baud rate  and without slave select pin
+ 116           * FUNCTION_INPUTS: P1.5(MISO) serial input  
+ 117           * FUNCTION_OUTPUTS: P1.7(MOSI) serial output
+C51 COMPILER V7.00  SPI_MASTER_NO_SS                                                       11/20/2008 11:35:54 PAGE 3   
+
+ 118           *                   P1.1
+ 119           */
+ 120          void main(void)
+ 121          {
+ 122   1      LcdInit();
+ 123   1      LcdWriteCmd(0x01);
+ 124   1      LcdWriteStr("Insha Allah!");
+ 125   1      SPCON |= 0x10;                /* Master mode */
+ 126   1      SPCON |= 0x82;                /* Fclk Periph/128 */
+ 127   1      SPCON |= 0x20;                /* P1.1 is available as standard I/O pin */
+ 128   1      SPCON &= ~0x08;               /* CPOL=0; transmit mode example */
+ 129   1      SPCON |= 0x04;                /* CPHA=1; transmit mode example */
+ 130   1      IEN1 |= 0x04;                 /* enable spi interrupt */
+ 131   1      IEN0 |= 0x01;
+ 132   1      IT0 = 1;
+ 133   1      SPCON |= 0x40;                /* run spi */
+ 134   1      EA=1;                         /* enable interrupts */
+ 135   1      
+ 136   1              while(1)                                                /* endless  */
+ 137   1         {
+ 138   2         //P11=~P11;                /* P1.1 is available as standard I/O pin */ 
+ 139   2         SPDAT=data_example;        /* send an example data */
+ 140   2         while(!transmit_completed);/* wait end of transmition */
+ 141   2         transmit_completed = 0;    /* clear software transfert flag */
+ 142   2      
+ 143   2         //SPDAT=0x00;                /* data is send to generate SCK signal */
+ 144   2         //while(!transmit_completed);/* wait end of transmition */
+ 145   2         //transmit_completed = 0;    /* clear software transfert flag */
+ 146   2         //data_save = serial_data;   /* save receive data */  
+ 147   2         }
+ 148   1      
+ 149   1      }
+ 150          void KeyInt() interrupt 0 
+ 151          {  
+ 152   1              if(isInit)
+ 153   1              {
+ 154   2                      Key1 = P2&0x1F;
+ 155   2                      //LcdWriteCmd(0x01);
+ 156   2                      //LcdGotoXY(1,1);
+ 157   2                      //LcdWriteChar(Key1+48);
+ 158   2                      switch(Key1)
+ 159   2                      {
+ 160   3                      case 0:
+ 161   3                              break;
+ 162   3                      case 1:
+ 163   3                              break;
+ 164   3                       }
+ 165   2               }
+ 166   1      }
+ 167          void it_SPI(void) interrupt 9 /* interrupt address is 0x004B */
+ 168          {
+ 169   1              switch  ( SPSTA )         /* read and clear spi status register */
+ 170   1              {
+ 171   2                      case 0x80:
+ 172   2               serial_data=SPDAT;   /* read receive data */
+ 173   2                       transmit_completed=1;/* set software flag */
+ 174   2                      break;
+ 175   2      
+ 176   2                      case 0x10:
+ 177   2               /* put here for mode fault tasking */  
+ 178   2                      break;
+ 179   2              
+C51 COMPILER V7.00  SPI_MASTER_NO_SS                                                       11/20/2008 11:35:54 PAGE 4   
+
+ 180   2                      case 0x40:
+ 181   2               /* put here for overrun tasking */     
+ 182   2                      break;
+ 183   2              }
+ 184   1      }
+ 185          
+ 186          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    223    ----
+   CONSTANT SIZE    =     13    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     22       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      2    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

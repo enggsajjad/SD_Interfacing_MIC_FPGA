@@ -1,0 +1,36 @@
+WIN32 L51 CODE BANKING LINKER/LOCATOR V4.08.06,  INVOKED BY: 
+L51.EXE f:\p\sd\usbwiz_oem\uart\main.OBJ  to  F:\P\SD\USBWIZ_OEM\UART\USBWIZ.ABS PR(F:\P\SD\USBWIZ_OEM\UART\USBWIZ.M51) SN(1066142959415E46769E694) PW(80) RS(256) ix 
+
+INTER-MODULE CROSS-REFERENCE LISTING
+------------------------------------
+
+    NAME. . . . . . . . USAGE   MODULE NAMES
+    ----------------------------------------
+    ?C_START3 . . . . . CODE    [C3S]:  MAIN 
+    DELAYONEMS  . . . . CODE    [MAIN]:  MAIN 
+    GETC  . . . . . . . CODE    [MAIN]: 
+    I . . . . . . . . . DATA    [MAIN]: 
+    IDATALEN  . . . . .         [_C_IDATALEN]:  C3S 
+    IPGN1?C . . . . . . CODE    [IPGN1]:  MAIN 
+    ISINIT  . . . . . . BIT     [MAIN]: 
+    KEY . . . . . . . . DATA    [MAIN]: 
+    KEYINT  . . . . . . CODE    [MAIN]: 
+    LCDBUSY . . . . . . CODE    [MAIN]: 
+    LCDCLEAR  . . . . . CODE    [MAIN]: 
+    LCDINIT . . . . . . CODE    [MAIN]: 
+    MAIN  . . . . . . . CODE    [MAIN]:  C3S 
+    RECCHAR . . . . . . DATA    [MAIN]: 
+    RXFLAG  . . . . . . BIT     [MAIN]: 
+    SERIAL  . . . . . . CODE    [MAIN]: 
+    TEMP  . . . . . . . DATA    [MAIN]: 
+    _INITP2?  . . . . .         [_C_IDATALEN]:  C3S 
+    _LCDGOTOXY  . . . . CODE    [MAIN]: 
+    _LCDWRITECHAR . . . CODE    [MAIN]: 
+    _LCDWRITECMD  . . . CODE    [MAIN]:  MAIN 
+    _LCDWRITESTR  . . . CODE    [MAIN]: 
+    _SELECTLINES  . . . CODE    [MAIN]: 
+    _SENDCHAR . . . . . CODE    [MAIN]: 
+    _SENDSTR  . . . . . CODE    [MAIN]: 
+    _SETBAUDRATE  . . . CODE    [MAIN]: 
+    _SETBAUDRATE?BIT  . BIT     [MAIN]: 
+    _STACK  . . . . . . IDATA   [MAIN]:  C3S 

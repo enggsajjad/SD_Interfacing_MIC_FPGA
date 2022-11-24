@@ -1,0 +1,29 @@
+<html>
+<body>
+<pre>
+<h1>µVision2 Build Log</h1>
+<h2>Project:</h2>
+L:\users\trainees_2004\Erwann\Spi\a51\without_ss\master\spi_master_no_ss.uv2
+Project File Date:  04/30/2004
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling spi_master_no_ss.a51...
+linking...
+Program Size: data=8.0 xdata=0 code=327
+creating hex file from "spi_master_no_ss"...
+"spi_master_no_ss" - 0 Error(s), 0 Warning(s).
+"batchisp" -device AT89C51RD2 -hardware RS232 -autoisp 1 0 -port COM2 -baudrate 38400 -operation MEMORY FLASH LOADBUFFER spi_master_no_ss.HEX PROGRAM START RESET 0
+Running batchisp 0.0.12 on Fri Apr 30 16:21:37 2004
+AT89C51RD2 - RS232 - COM2 - 38400
+Device selection....................... PASS 
+Hardware selection..................... PASS 
+Opening port........................... PASS 
+Setting Auto ISP....................... PASS 
+Synchronizing target................... PASS 
+Reading Bootloader version............. PASS	1.0.0
+Selecting FLASH........................ PASS 
+Parsing HEX file....................... PASS	spi_master_no_ss.HEX
+Programming memory..................... PASS	0x0000	0x0146
+Starting Application................... PASS 
+Summary:  Total 10   Passed 10   Failed 0

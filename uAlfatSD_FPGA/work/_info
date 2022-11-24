@@ -1,0 +1,70 @@
+m255
+o
+cModel Technology
+dH:\uAlfat\spi_verilog_umair
+vglbl
+I;3bdO6U;R_i?oXm0zZ=6m3
+V]6_PH00iDgcD`AVz9`gA:0
+dF:\Projects@ICCC_PD\uAlfat
+w1059855545
+FC:/Xilinx/verilog/src/glbl.v
+L0 5
+OX;L;5.6e;17
+r1
+31
+o-O0
+vspi_com
+I=WeMjmW[d1ic9XHMWSS`M1
+V:TC4A;DcmPLdXSzHUeSf=3
+dF:\Projects@ICCC_PD\uAlfat
+w1243606328
+Fspi_com.v
+L0 1
+OX;L;5.6e;17
+r1
+31
+o-O0
+vspi_contlr
+Iii>HdIBA<OzVFYjje>1EK1
+Vf6hIXOA[jVjb2FF;2jfzA0
+dF:\Projects@ICCC_PD\uAlfat
+w1243606150
+Fspi_contlr.v
+L0 1
+OX;L;5.6e;17
+r1
+31
+o-O0
+vspi_interface
+IlT5@VROInS7<PD>jEk]GE0
+VoITAk2>W?Y>jH3]N2fJgB3
+dF:\Projects@ICCC_PD\uAlfat
+w1243606328
+Fspi_interface.v
+L0 1
+OX;L;5.6e;17
+r1
+31
+o-O0
+vspi_interface_tf_v_tf
+IzYPj<k>c]XI=][X<[2^GL3
+V4`==FX`9n9bHc8z_V1zdz0
+dF:\Projects@ICCC_PD\uAlfat
+w1243925382
+Ftf.v
+L0 3
+OX;L;5.6e;17
+r1
+31
+o-O0
+vspi_test
+I3L5gkJOWTHDXEomm@cn6>2
+VWE:fNLdHk49MfmY4blez61
+dF:\Projects@ICCC_PD\uAlfat
+w1243601128
+Fspi_test.v
+L0 2
+OX;L;5.6e;17
+r1
+31
+o-O0
